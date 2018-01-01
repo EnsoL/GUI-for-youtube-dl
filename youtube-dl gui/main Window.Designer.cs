@@ -29,16 +29,19 @@
         private void InitializeComponent()
         {
             this.dlButton = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
+            this.inputLabel = new System.Windows.Forms.Label();
             this.inputBox = new System.Windows.Forms.TextBox();
-            this.audio = new System.Windows.Forms.CheckBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.outputBox = new System.Windows.Forms.TextBox();
+            this.outputLabel = new System.Windows.Forms.Label();
+            this.outputBox = new System.Windows.Forms.RichTextBox();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.helpMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.updateMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
+            this.fileTypeComboBox = new System.Windows.Forms.ComboBox();
+            this.fileFormatLabel = new System.Windows.Forms.Label();
+            this.dlFolderLabel = new System.Windows.Forms.Label();
+            this.downloadFolderComboBox = new System.Windows.Forms.ComboBox();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -52,51 +55,41 @@
             this.dlButton.UseVisualStyleBackColor = true;
             this.dlButton.Click += new System.EventHandler(this.dlButton_Click);
             // 
-            // label1
+            // inputLabel
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(11, 48);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(42, 13);
-            this.label1.TabIndex = 1;
-            this.label1.Text = "URL/s:";
+            this.inputLabel.AutoSize = true;
+            this.inputLabel.Location = new System.Drawing.Point(11, 30);
+            this.inputLabel.Name = "inputLabel";
+            this.inputLabel.Size = new System.Drawing.Size(42, 13);
+            this.inputLabel.TabIndex = 1;
+            this.inputLabel.Text = "URL/s:";
             // 
             // inputBox
             // 
-            this.inputBox.Location = new System.Drawing.Point(14, 64);
+            this.inputBox.Location = new System.Drawing.Point(14, 46);
             this.inputBox.Multiline = true;
             this.inputBox.Name = "inputBox";
             this.inputBox.Size = new System.Drawing.Size(615, 127);
             this.inputBox.TabIndex = 2;
             // 
-            // audio
+            // outputLabel
             // 
-            this.audio.AutoSize = true;
-            this.audio.Location = new System.Drawing.Point(14, 197);
-            this.audio.Name = "audio";
-            this.audio.Size = new System.Drawing.Size(53, 17);
-            this.audio.TabIndex = 3;
-            this.audio.Text = "Audio";
-            this.audio.UseVisualStyleBackColor = true;
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(12, 281);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(42, 13);
-            this.label2.TabIndex = 4;
-            this.label2.Text = "Output:";
+            this.outputLabel.AutoSize = true;
+            this.outputLabel.Location = new System.Drawing.Point(11, 293);
+            this.outputLabel.Name = "outputLabel";
+            this.outputLabel.Size = new System.Drawing.Size(42, 13);
+            this.outputLabel.TabIndex = 4;
+            this.outputLabel.Text = "Output:";
             // 
             // outputBox
             // 
             this.outputBox.BackColor = System.Drawing.SystemColors.Window;
-            this.outputBox.Location = new System.Drawing.Point(14, 297);
-            this.outputBox.Multiline = true;
+            this.outputBox.Location = new System.Drawing.Point(14, 309);
             this.outputBox.Name = "outputBox";
             this.outputBox.ReadOnly = true;
             this.outputBox.Size = new System.Drawing.Size(615, 85);
             this.outputBox.TabIndex = 5;
+            this.outputBox.Text = "";
             // 
             // menuStrip1
             // 
@@ -131,20 +124,68 @@
             this.updateMenuItem.Text = "&Update";
             this.updateMenuItem.Click += new System.EventHandler(this.updateMenuItem_Click);
             // 
-            // backgroundWorker1
+            // fileTypeComboBox
             // 
-            this.backgroundWorker1.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker1_DoWork);
+            this.fileTypeComboBox.FormattingEnabled = true;
+            this.fileTypeComboBox.Items.AddRange(new object[] {
+            "Audio",
+            "  mp3",
+            "  m4a",
+            "  flac",
+            "  aac",
+            "  wav",
+            "  vorbis",
+            "  opus",
+            "Video",
+            "  mp4"});
+            this.fileTypeComboBox.Location = new System.Drawing.Point(15, 196);
+            this.fileTypeComboBox.Name = "fileTypeComboBox";
+            this.fileTypeComboBox.Size = new System.Drawing.Size(121, 21);
+            this.fileTypeComboBox.TabIndex = 7;
+            // 
+            // fileFormatLabel
+            // 
+            this.fileFormatLabel.AutoSize = true;
+            this.fileFormatLabel.Location = new System.Drawing.Point(12, 180);
+            this.fileFormatLabel.Name = "fileFormatLabel";
+            this.fileFormatLabel.Size = new System.Drawing.Size(58, 13);
+            this.fileFormatLabel.TabIndex = 8;
+            this.fileFormatLabel.Text = "File format:";
+            // 
+            // dlFolderLabel
+            // 
+            this.dlFolderLabel.AutoSize = true;
+            this.dlFolderLabel.Location = new System.Drawing.Point(12, 232);
+            this.dlFolderLabel.Name = "dlFolderLabel";
+            this.dlFolderLabel.Size = new System.Drawing.Size(87, 13);
+            this.dlFolderLabel.TabIndex = 9;
+            this.dlFolderLabel.Text = "Download folder:";
+            // 
+            // downloadFolderComboBox
+            // 
+            this.downloadFolderComboBox.FormattingEnabled = true;
+            this.downloadFolderComboBox.Items.AddRange(new object[] {
+            "",
+            "C:\\Users\\Enso\\Downloads\\",
+            "C:\\Users\\Enso\\Desktop\\"});
+            this.downloadFolderComboBox.Location = new System.Drawing.Point(15, 248);
+            this.downloadFolderComboBox.Name = "downloadFolderComboBox";
+            this.downloadFolderComboBox.Size = new System.Drawing.Size(220, 21);
+            this.downloadFolderComboBox.TabIndex = 10;
             // 
             // mainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(644, 437);
+            this.Controls.Add(this.downloadFolderComboBox);
+            this.Controls.Add(this.dlFolderLabel);
+            this.Controls.Add(this.fileFormatLabel);
+            this.Controls.Add(this.fileTypeComboBox);
             this.Controls.Add(this.outputBox);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.audio);
+            this.Controls.Add(this.outputLabel);
             this.Controls.Add(this.inputBox);
-            this.Controls.Add(this.label1);
+            this.Controls.Add(this.inputLabel);
             this.Controls.Add(this.dlButton);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
@@ -161,16 +202,19 @@
         #endregion
 
         private System.Windows.Forms.Button dlButton;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label inputLabel;
         private System.Windows.Forms.TextBox inputBox;
-        private System.Windows.Forms.CheckBox audio;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.TextBox outputBox;
+        private System.Windows.Forms.Label outputLabel;
+        private System.Windows.Forms.RichTextBox outputBox;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem helpMenuItem;
         private System.Windows.Forms.ToolStripMenuItem updateMenuItem;
         private System.Windows.Forms.ToolStripMenuItem aboutMenuItem;
         private System.ComponentModel.BackgroundWorker backgroundWorker1;
+        private System.Windows.Forms.ComboBox fileTypeComboBox;
+        private System.Windows.Forms.Label fileFormatLabel;
+        private System.Windows.Forms.Label dlFolderLabel;
+        private System.Windows.Forms.ComboBox downloadFolderComboBox;
     }
 }
 
