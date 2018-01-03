@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(mainWindow));
             this.dlButton = new System.Windows.Forms.Button();
             this.inputLabel = new System.Windows.Forms.Label();
             this.inputBox = new System.Windows.Forms.TextBox();
@@ -137,7 +138,9 @@
             "  vorbis",
             "  opus",
             "Video",
-            "  mp4"});
+            "  mp4",
+            "  webm",
+            "  3gp"});
             this.fileTypeComboBox.Location = new System.Drawing.Point(15, 196);
             this.fileTypeComboBox.Name = "fileTypeComboBox";
             this.fileTypeComboBox.Size = new System.Drawing.Size(121, 21);
@@ -165,9 +168,8 @@
             // 
             this.downloadFolderComboBox.FormattingEnabled = true;
             this.downloadFolderComboBox.Items.AddRange(new object[] {
-            "",
-            "C:\\Users\\Enso\\Downloads\\",
-            "C:\\Users\\Enso\\Desktop\\"});
+            "C:\\Users\\Enso\\Desktop\\",
+            "C:\\Users\\Enso\\Downloads\\"});
             this.downloadFolderComboBox.Location = new System.Drawing.Point(15, 248);
             this.downloadFolderComboBox.Name = "downloadFolderComboBox";
             this.downloadFolderComboBox.Size = new System.Drawing.Size(220, 21);
@@ -188,10 +190,12 @@
             this.Controls.Add(this.inputLabel);
             this.Controls.Add(this.dlButton);
             this.Controls.Add(this.menuStrip1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "mainWindow";
             this.RightToLeftLayout = true;
             this.Text = "YouTube DL GUI";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.mainWindow_FormClosing);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);

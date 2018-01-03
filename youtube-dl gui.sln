@@ -6,6 +6,9 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "youtube-dl gui", "youtube-dl gui\youtube-dl gui.csproj", "{1790ADFF-603D-48DC-830F-26E44476C6A4}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C669CEE7-3638-42D5-BF08-910D98CE8819}"
+	ProjectSection(SolutionItems) = preProject
+		download icon.ico = download icon.ico
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

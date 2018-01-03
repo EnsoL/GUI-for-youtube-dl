@@ -8,6 +8,7 @@ namespace youtube_dl_gui
 {
     public partial class mainWindow : Form
     {
+        static bool debug = true;
         static String START_OF_COMMAND = "/C youtube-dl ";
         String currentVersion = "";
 
@@ -16,15 +17,16 @@ namespace youtube_dl_gui
             InitializeComponent();
             fileTypeComboBox.SelectedIndex = 0;
             fileTypeComboBox.SelectedItem = System.Configuration.ConfigurationSettings.AppSettings["file format"];
-            downloadFolderComboBox.SelectedItem = System.Configuration.ConfigurationSettings.AppSettings["file format"];
+            downloadFolderComboBox.SelectedItem = System.Configuration.ConfigurationSettings.AppSettings["downlad folder"];
         }
 
         private void dlButton_Click(object sender, EventArgs e)
         {
             List<string> lines = new List<string>(inputBox.Lines);
 
-            string arg = START_OF_COMMAND + "--newline ";
-            if (downloadFolderComboBox.SelectedItem != null) arg += "-o " + downloadFolderComboBox.SelectedItem.ToString() + " ";
+            string arg = START_OF_COMMAND + "--newline -o ";
+            if (downloadFolderComboBox.SelectedItem != null) arg += downloadFolderComboBox.SelectedItem.ToString();
+            arg += "%(title)s.%(ext)s ";
             if (fileTypeComboBox.SelectedItem != null) switch (fileTypeComboBox.SelectedItem.ToString().Trim().ToLower())
             {
                 case "audio": arg += "-x "; break;
@@ -38,28 +40,29 @@ namespace youtube_dl_gui
                 case "video": break;
                 case "mp4": arg += "-f mp4 "; break;
                 case "webm": arg += "-f webm "; break;
+                case "3gp": arg += "-f webm "; break;
             }
 
             ProcessStartInfo startInfo = new ProcessStartInfo();
             startInfo.FileName = "cmd.exe";
-            outputBox.Text += "\r\n" + arg + "\r\n";
             startInfo.UseShellExecute = false;
-            startInfo.RedirectStandardOutput = true;
-            startInfo.CreateNoWindow = true;
+            if(!debug) startInfo.RedirectStandardOutput = true;
+            if(!debug) startInfo.CreateNoWindow = true;
 
             while (lines.Count > 0)
             {
-                startInfo.Arguments = arg + lines[0];
+                startInfo.Arguments = arg + "\"" + lines[0] + "\"";
+                outputBox.Text += "\r\n" + arg + "\"" + lines[0] + "\"" + "\r\n";
                 lines.Remove(lines[0]);
                 inputBox.Lines = lines.ToArray();
 
                 Process process = new Process();
                 process.StartInfo = startInfo;
-                process.StartInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
+                //if(!debug)process.StartInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
 
                 String output;
                 process.Start();
-                while (!process.StandardOutput.EndOfStream)
+                if(!debug) while (!process.StandardOutput.EndOfStream)
                 {
                     string line = process.StandardOutput.ReadLine();
                     if (line.Contains("]")) line = line.Split(']')[1];
@@ -68,6 +71,8 @@ namespace youtube_dl_gui
                     outputBox.SelectionStart = outputBox.Text.Length;
                     outputBox.ScrollToCaret();
                 }
+                if (debug) System.Threading.Thread.Sleep(10000); 
+                if (!debug) process.Close();
             }
         }
 
@@ -152,6 +157,12 @@ namespace youtube_dl_gui
             }
             currentVersion += ".";
             process.Close();
+        }
+
+        private void mainWindow_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            System.Configuration.ConfigurationSettings.AppSettings["file format"] = fileTypeComboBox.SelectedItem.ToString();
+            System.Configuration.ConfigurationSettings.AppSettings["downlad folder"] = downloadFolderComboBox.SelectedItem.ToString();
         }
     }
 }
