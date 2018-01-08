@@ -38,11 +38,14 @@
             this.helpMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.updateMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
-            this.fileTypeComboBox = new System.Windows.Forms.ComboBox();
+            this.fileFormatComboBox = new System.Windows.Forms.ComboBox();
             this.fileFormatLabel = new System.Windows.Forms.Label();
             this.dlFolderLabel = new System.Windows.Forms.Label();
             this.downloadFolderComboBox = new System.Windows.Forms.ComboBox();
+            this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.loadSettingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveSettingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.setToDefaultToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -95,7 +98,8 @@
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.helpMenuItem});
+            this.helpMenuItem,
+            this.settingsToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(644, 24);
@@ -125,10 +129,10 @@
             this.updateMenuItem.Text = "&Update";
             this.updateMenuItem.Click += new System.EventHandler(this.updateMenuItem_Click);
             // 
-            // fileTypeComboBox
+            // fileFormatComboBox
             // 
-            this.fileTypeComboBox.FormattingEnabled = true;
-            this.fileTypeComboBox.Items.AddRange(new object[] {
+            this.fileFormatComboBox.FormattingEnabled = true;
+            this.fileFormatComboBox.Items.AddRange(new object[] {
             "Audio",
             "  mp3",
             "  m4a",
@@ -141,10 +145,10 @@
             "  mp4",
             "  webm",
             "  3gp"});
-            this.fileTypeComboBox.Location = new System.Drawing.Point(15, 196);
-            this.fileTypeComboBox.Name = "fileTypeComboBox";
-            this.fileTypeComboBox.Size = new System.Drawing.Size(121, 21);
-            this.fileTypeComboBox.TabIndex = 7;
+            this.fileFormatComboBox.Location = new System.Drawing.Point(15, 196);
+            this.fileFormatComboBox.Name = "fileFormatComboBox";
+            this.fileFormatComboBox.Size = new System.Drawing.Size(121, 21);
+            this.fileFormatComboBox.TabIndex = 7;
             // 
             // fileFormatLabel
             // 
@@ -175,6 +179,37 @@
             this.downloadFolderComboBox.Size = new System.Drawing.Size(220, 21);
             this.downloadFolderComboBox.TabIndex = 10;
             // 
+            // settingsToolStripMenuItem
+            // 
+            this.settingsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.loadSettingsToolStripMenuItem,
+            this.saveSettingsToolStripMenuItem,
+            this.setToDefaultToolStripMenuItem});
+            this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
+            this.settingsToolStripMenuItem.Text = "&Settings";
+            // 
+            // loadSettingsToolStripMenuItem
+            // 
+            this.loadSettingsToolStripMenuItem.Name = "loadSettingsToolStripMenuItem";
+            this.loadSettingsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.loadSettingsToolStripMenuItem.Text = "&Load settings";
+            this.loadSettingsToolStripMenuItem.Click += new System.EventHandler(this.loadSettingsToolStripMenuItem_Click);
+            // 
+            // saveSettingsToolStripMenuItem
+            // 
+            this.saveSettingsToolStripMenuItem.Name = "saveSettingsToolStripMenuItem";
+            this.saveSettingsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.saveSettingsToolStripMenuItem.Text = "S&ave settings";
+            this.saveSettingsToolStripMenuItem.Click += new System.EventHandler(this.saveSettingsToolStripMenuItem_Click);
+            // 
+            // setToDefaultToolStripMenuItem
+            // 
+            this.setToDefaultToolStripMenuItem.Name = "setToDefaultToolStripMenuItem";
+            this.setToDefaultToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.setToDefaultToolStripMenuItem.Text = "Set to &Default";
+            this.setToDefaultToolStripMenuItem.Click += new System.EventHandler(this.setToDefaultToolStripMenuItem_Click);
+            // 
             // mainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -183,7 +218,7 @@
             this.Controls.Add(this.downloadFolderComboBox);
             this.Controls.Add(this.dlFolderLabel);
             this.Controls.Add(this.fileFormatLabel);
-            this.Controls.Add(this.fileTypeComboBox);
+            this.Controls.Add(this.fileFormatComboBox);
             this.Controls.Add(this.outputBox);
             this.Controls.Add(this.outputLabel);
             this.Controls.Add(this.inputBox);
@@ -214,11 +249,14 @@
         private System.Windows.Forms.ToolStripMenuItem helpMenuItem;
         private System.Windows.Forms.ToolStripMenuItem updateMenuItem;
         private System.Windows.Forms.ToolStripMenuItem aboutMenuItem;
-        private System.ComponentModel.BackgroundWorker backgroundWorker1;
-        private System.Windows.Forms.ComboBox fileTypeComboBox;
+        private System.Windows.Forms.ComboBox fileFormatComboBox;
         private System.Windows.Forms.Label fileFormatLabel;
         private System.Windows.Forms.Label dlFolderLabel;
         private System.Windows.Forms.ComboBox downloadFolderComboBox;
+        private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem loadSettingsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem saveSettingsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem setToDefaultToolStripMenuItem;
     }
 }
 
