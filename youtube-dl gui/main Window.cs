@@ -84,6 +84,7 @@ namespace youtube_dl_gui
 
                 string output;
                 process.Start();
+                process.BeginOutputReadLine();
                 //process.StandardInput.WriteLine(arg + "\"" + lines[0] + "\"");
                 /*
                 while (!process.StandardOutput.EndOfStream)
