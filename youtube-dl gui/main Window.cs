@@ -10,8 +10,9 @@ namespace youtube_dl_gui
     public partial class mainWindow : Form
     {
         static bool debug = false;
-        static string START_OF_COMMAND = "/K youtube-dl ";
-        static string START_OF_COMMAND_C = "/C youtube-dl ";
+        static string K_ARG = "/K youtube-dl ";
+        static string C_ARG = "/C youtube-dl ";
+        static string START_OF_COMMAND = "youtube-dl ";
         string currentVersion = "";
         string currentDirectory;
 
@@ -61,87 +62,43 @@ namespace youtube_dl_gui
             startInfo.RedirectStandardInput = true;
             startInfo.CreateNoWindow = true;
 
+            Process process = new Process();
+            process.StartInfo = startInfo;
+            process.Start();
+
             while (lines.Count > 0)
             { 
-                startInfo.Arguments = arg + "\"" + lines[0] + "\"";
-                outputBox.Text += "\r\n" + arg + "\"" + lines[0] + "\"" + "\r\n";
+                for (int i = 0; i < 3; i++) process.StandardOutput.ReadLine();
+
+                process.StandardInput.WriteLine(arg + "\"" + lines[0] + "\"");
                 lines.Remove(lines[0]);
                 inputBox.Lines = lines.ToArray();
 
-                Process process = new Process();
-                process.StartInfo = startInfo;
-
-                process.OutputDataReceived += new DataReceivedEventHandler((object sendingProcess,
-            DataReceivedEventArgs outLine) =>
-                {
-                    // Prepend line numbers to each line of the output.
-                    if (!String.IsNullOrEmpty(outLine.Data))
-                    {
-                        outputBox.Text += outLine.Data + "\r\n";
-                    }
-                });
-
-
-                string output;
-                process.Start();
-                process.BeginOutputReadLine();
-                //process.StandardInput.WriteLine(arg + "\"" + lines[0] + "\"");
-                /*
                 while (!process.StandardOutput.EndOfStream)
                 {
                     string line = process.StandardOutput.ReadLine();
                     if (line.Contains("]")) line = line.Split(']')[1];
-                    output = line + "\r\n";
-                    outputBox.Text += output;
+                    line = line + "\r\n";
+                    if (!line.Contains("Microsoft") && !line.Trim().Equals("")) outputBox.Text += line;
                     outputBox.SelectionStart = outputBox.Text.Length;
                     outputBox.ScrollToCaret();  // https://www.youtube.com/watch?v=qgnd5JvpAFc 
-                }*/
-                
-
-                /*process.StandardInput.WriteLine("ls");
-                while (!process.StandardOutput.EndOfStream)
-                {
-                    string line = process.StandardOutput.ReadLine();
-                    output = line + "\r\n";
-                    outputBox.Text += output;
-                    outputBox.SelectionStart = outputBox.Text.Length;
-                    outputBox.ScrollToCaret();
                 }
 
+                //process.StandardInput.WriteLine("ping 8.8.8.8");
 
-
-                // Set our event handler to asynchronously read the sort output.
-                process.OutputDataReceived += new DataReceivedEventHandler(SortOutputHandler);
-
-                // Redirect standard input as well.  This stream
-                // is used synchronously.
-                process.StartInfo.RedirectStandardInput = true;
-                process.Start();
-
-                // Use a stream writer to synchronously write the sort input.
-                StreamWriter sortStreamWriter = process.StandardInput;
-
-                // Start the asynchronous read of the sort output stream.
-                process.BeginOutputReadLine();
-                Console.WriteLine("Ready to sort up to 50 lines of text");
-                String inputText;
-                int numInputLines = 0;
-                do
+                //process.StandardInput.WriteLine("cd Downloads");
+                //process.StandardInput.WriteLine("ls");
+                /*while (!process.StandardOutput.EndOfStream)
                 {
-                    Console.WriteLine("Enter a text line (or press the Enter key to stop):");
-
-                    inputText = Console.ReadLine();
-                    if (!String.IsNullOrEmpty(inputText))
-                    {
-                        numInputLines++;
-                        sortStreamWriter.WriteLine(inputText);
-                    }
-                } while (true);*/
-
-
-
-                process.Close();
+                    string line = process.StandardOutput.ReadLine();
+                    line = line + "\r\n";
+                    if(!line.Contains("Microsoft") && !line.Trim().Equals("")) outputBox.Text += line;
+                    outputBox.SelectionStart = outputBox.Text.Length;
+                    outputBox.ScrollToCaret();
+                }*/     
             }
+
+            process.Close();
         }
 
         private void aboutMenuItem_Click(object sender, EventArgs e)
@@ -156,7 +113,7 @@ namespace youtube_dl_gui
         {  
             ProcessStartInfo startInfo = new ProcessStartInfo();
             startInfo.FileName = "cmd.exe";
-            startInfo.Arguments = START_OF_COMMAND_C + "--update";
+            startInfo.Arguments = C_ARG + "--update";
             startInfo.UseShellExecute = false;
             startInfo.RedirectStandardOutput = true;
             startInfo.CreateNoWindow = true;
@@ -206,7 +163,7 @@ namespace youtube_dl_gui
         {
             ProcessStartInfo startInfo = new ProcessStartInfo();
             startInfo.FileName = "cmd.exe";
-            startInfo.Arguments = START_OF_COMMAND_C + "--version";
+            startInfo.Arguments = C_ARG + "--version";
             startInfo.UseShellExecute = false;
             startInfo.RedirectStandardOutput = true;
             startInfo.CreateNoWindow = true;
@@ -221,12 +178,6 @@ namespace youtube_dl_gui
                 currentVersion = line + ".";
             }
             process.Close();
-        }
-
-        private void mainWindow_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            ConfigurationSettings.AppSettings["file format"] = fileFormatComboBox.SelectedItem.ToString();
-            ConfigurationSettings.AppSettings["downlad folder"] = downloadFolderComboBox.SelectedItem.ToString();
         }
 
         private void loadSettingsToolStripMenuItem_Click(object sender, EventArgs e)
@@ -289,3 +240,33 @@ namespace youtube_dl_gui
         }
     }
 }
+
+/*
+// Set our event handler to asynchronously read the sort output.
+process.OutputDataReceived += new DataReceivedEventHandler(SortOutputHandler);
+
+// Redirect standard input as well.  This stream
+// is used synchronously.
+process.StartInfo.RedirectStandardInput = true;
+process.Start();
+
+// Use a stream writer to synchronously write the sort input.
+StreamWriter sortStreamWriter = process.StandardInput;
+
+// Start the asynchronous read of the sort output stream.
+process.BeginOutputReadLine();
+Console.WriteLine("Ready to sort up to 50 lines of text");
+String inputText;
+int numInputLines = 0;
+do
+{
+    Console.WriteLine("Enter a text line (or press the Enter key to stop):");
+
+    inputText = Console.ReadLine();
+    if (!String.IsNullOrEmpty(inputText))
+    {
+        numInputLines++;
+        sortStreamWriter.WriteLine(inputText);
+    }
+} while (true);
+*/

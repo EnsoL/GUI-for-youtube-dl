@@ -98,8 +98,8 @@
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.helpMenuItem,
-            this.settingsToolStripMenuItem});
+            this.settingsToolStripMenuItem,
+            this.helpMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(644, 24);
@@ -118,14 +118,14 @@
             // aboutMenuItem
             // 
             this.aboutMenuItem.Name = "aboutMenuItem";
-            this.aboutMenuItem.Size = new System.Drawing.Size(112, 22);
+            this.aboutMenuItem.Size = new System.Drawing.Size(152, 22);
             this.aboutMenuItem.Text = "&About";
             this.aboutMenuItem.Click += new System.EventHandler(this.aboutMenuItem_Click);
             // 
             // updateMenuItem
             // 
             this.updateMenuItem.Name = "updateMenuItem";
-            this.updateMenuItem.Size = new System.Drawing.Size(112, 22);
+            this.updateMenuItem.Size = new System.Drawing.Size(152, 22);
             this.updateMenuItem.Text = "&Update";
             this.updateMenuItem.Click += new System.EventHandler(this.updateMenuItem_Click);
             // 
@@ -230,7 +230,6 @@
             this.Name = "mainWindow";
             this.RightToLeftLayout = true;
             this.Text = "YouTube DL GUI";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.mainWindow_FormClosing);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
