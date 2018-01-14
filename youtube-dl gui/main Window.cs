@@ -29,7 +29,7 @@ namespace youtube_dl_gui
 
             List<string> urls = new List<string>(inputBox.Lines);
 
-            string command = C_ARG + "--newline ";
+            string command = K_ARG + "--newline ";
             if (downloadFolderComboBox.SelectedItem != null) command += "-o " + downloadFolderComboBox.SelectedItem.ToString();
             command += "%(title)s.%(ext)s ";
             if (fileFormatComboBox.SelectedItem != null) switch (fileFormatComboBox.SelectedItem.ToString().Trim().ToLower())
@@ -56,10 +56,13 @@ namespace youtube_dl_gui
 
             while (urls.Count > 0)
             {
-                string arg = urls[0];
-                urls.Remove(urls[0]);
+                string arg = urls[0].Trim();
+                Uri url;
                 inputBox.Lines = urls.ToArray();
-                Uri url = new Uri(arg);
+
+
+                if (Uri.IsWellFormedUriString(arg, UriKind.Absolute)) url = new Uri(arg);
+                else continue;
 
                 if (url.Scheme == Uri.UriSchemeHttp || url.Scheme == Uri.UriSchemeHttps) arg = command + "\"" + url + "\"";
                 else continue;
@@ -68,9 +71,27 @@ namespace youtube_dl_gui
                 Process process = new Process();
                 process.StartInfo = startInfo;
 
-                downloadWorker.RunWorkerAsync(process);
+                process.Start();
+
+                while (!process.StandardOutput.EndOfStream)
+                {
+                    string outputLine = process.StandardOutput.ReadLine();
+                    if (outputLine.Contains("]")) outputLine = outputLine.Split(']')[1];
+                    outputLine = outputLine + "\r\n";
+
+                    if (!outputLine.Contains("Microsoft") && !outputLine.Trim().Equals("") &&
+                        !(outputLine.Contains(">") || outputLine.Contains(":\\"))) outputBox.Text += outputLine;
+
+                    // Scrolls the textBox to the bottom.
+                    outputBox.SelectionStart = outputBox.Text.Length;
+                    outputBox.ScrollToCaret();  // https://www.youtube.com/watch?v=qgnd5JvpAFc https://www.youtube.com/watch?v=fc1tg9qkGyI
+                }
 
                 process.Close();
+
+                // This is last, so that only after something is downloaded, it's removed from the list.
+                urls.Remove(urls[0]);
+                inputBox.Lines = urls.ToArray();
             }
 
             inputBox.ReadOnly = false;
@@ -242,23 +263,6 @@ namespace youtube_dl_gui
             }
 
             return -1;
-        }
-
-        private void downloadWorker_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
-        {
-            Process process = (Process) e.Argument;
-            process.Start();
-            StreamReader reader = process.StandardOutput;
-
-            while (reader.EndOfStream)
-            {
-                string outputLine = reader.ReadLine();
-                if (outputLine.Contains("]")) outputLine = outputLine.Split(']')[1];
-                outputLine = outputLine + "\r\n";
-                if (!outputLine.Contains("Microsoft") && !outputLine.Trim().Equals("")) outputBox.Text += outputLine;
-                outputBox.SelectionStart = outputBox.Text.Length;
-                outputBox.ScrollToCaret();  // https://www.youtube.com/watch?v=qgnd5JvpAFc https://www.youtube.com/watch?v=fc1tg9qkGyI
-            }
         }
     }
 }
