@@ -46,6 +46,7 @@
             this.fileFormatLabel = new System.Windows.Forms.Label();
             this.dlFolderLabel = new System.Windows.Forms.Label();
             this.downloadFolderComboBox = new System.Windows.Forms.ComboBox();
+            this.downloadWorker = new System.ComponentModel.BackgroundWorker();
             this.menuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -211,6 +212,11 @@
             this.downloadFolderComboBox.Size = new System.Drawing.Size(220, 21);
             this.downloadFolderComboBox.TabIndex = 10;
             // 
+            // downloadWorker
+            // 
+            this.downloadWorker.WorkerReportsProgress = true;
+            this.downloadWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.downloadWorker_DoWork);
+            // 
             // mainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -257,6 +263,7 @@
         private System.Windows.Forms.ToolStripMenuItem loadSettingsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem saveSettingsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem setToDefaultToolStripMenuItem;
+        private System.ComponentModel.BackgroundWorker downloadWorker;
     }
 }
 

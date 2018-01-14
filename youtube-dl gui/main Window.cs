@@ -9,27 +9,17 @@ namespace youtube_dl_gui
 {
     public partial class mainWindow : Form
     {
-        static bool debug = false;
         static string K_ARG = "/K youtube-dl ";
         static string C_ARG = "/C youtube-dl ";
         static string START_OF_COMMAND = "youtube-dl ";
         string currentVersion = "";
-        string currentDirectory;
 
         public mainWindow()
         {
             InitializeComponent();
-
-            if (!debug)
-            {
-                currentDirectory = Application.ExecutablePath;
-                string exeName = AppDomain.CurrentDomain.FriendlyName;
-                if (currentDirectory.Contains(exeName)) currentDirectory.Remove(currentDirectory.IndexOf(exeName), exeName.Length);
-                outputBox.Text += currentDirectory + "\r\n";
-            }
-
-
             loadSettings();
+            fileFormatComboBox.SelectedIndex = 0;
+            downloadFolderComboBox.SelectedIndex = 0;
         }
 
         private void dlButton_Click(object sender, EventArgs e)
@@ -77,17 +67,8 @@ namespace youtube_dl_gui
                 startInfo.Arguments = arg;
                 Process process = new Process();
                 process.StartInfo = startInfo;
-                process.Start();
 
-                while (!process.StandardOutput.EndOfStream)
-                {
-                    string outputLine = process.StandardOutput.ReadLine();
-                    if (outputLine.Contains("]")) outputLine = outputLine.Split(']')[1];
-                    outputLine = outputLine + "\r\n";
-                    if (!outputLine.Contains("Microsoft") && !outputLine.Trim().Equals("")) outputBox.Text += outputLine;
-                    outputBox.SelectionStart = outputBox.Text.Length;
-                    outputBox.ScrollToCaret();  // https://www.youtube.com/watch?v=qgnd5JvpAFc 
-                }
+                downloadWorker.RunWorkerAsync(process);
 
                 process.Close();
             }
@@ -192,7 +173,7 @@ namespace youtube_dl_gui
 
         private void loadSettings()
         {
-            if (!File.Exists("settings.ini")) createSettings();
+            if (!File.Exists(AppDomain.CurrentDomain.BaseDirectory + "settings.ini")) createSettings();
             else
             {
                 StreamReader reader = new StreamReader(File.OpenRead("settings.ini"));
@@ -203,21 +184,29 @@ namespace youtube_dl_gui
                     line = reader.ReadLine().Split(':');
                     if (line.Length == 2)
                     {
-                        if (line[0].ToLower().Contains("file format")) fileFormatComboBox.SelectedIndex = Convert.ToInt16(line[1]);
-                        if (line[0].ToLower().Contains("download folder")) downloadFolderComboBox.Items.Add(line[1]);
+                        if (line[0].ToLower().Contains("file format"))
+                        {
+                            int format = fileFormatToNumber(line[1]);
+                            if (format >= 0 && format <= 11) fileFormatComboBox.SelectedIndex = format;
+                        }
+                        if (line[0].ToLower().Contains("download folder"))
+                        {
+                            downloadFolderComboBox.Items.Add(line[1]);
+                            downloadFolderComboBox.SelectedItem = line[1];
+                        }
                     }
                 }
-
+                
                 reader.Close();
             }
         }
 
         private void setSettings()
         {
-            if (!File.Exists("settings.ini")) createSettings();
+            if (!File.Exists(AppDomain.CurrentDomain.BaseDirectory + "settings.ini")) createSettings();
             else
             {
-                StreamWriter writer = new StreamWriter(File.OpenRead("settings.ini"));
+                StreamWriter writer = new StreamWriter(File.OpenRead(AppDomain.CurrentDomain.BaseDirectory + "settings.ini"));
                 writer.WriteAsync("file format : " + fileFormatComboBox.SelectedIndex);
                 writer.WriteAsync("download folder : " + downloadFolderComboBox.SelectedText);
                 writer.Close();
@@ -226,42 +215,50 @@ namespace youtube_dl_gui
 
         private void createSettings()
         {
-            using (FileStream fs = File.Create("settings.ini"))
+            using (FileStream fs = File.Create(AppDomain.CurrentDomain.BaseDirectory + "settings.ini"))
             {
-                string downloadPath = "C:\\Users\\Enso\\Desktop\\";
-                Byte[] info = new System.Text.UTF8Encoding(true).GetBytes("File Format : 8\r\nDownload Folder : " + downloadPath);
+                string downloadPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+                Byte[] info = new System.Text.UTF8Encoding(true).GetBytes("File Format : video\r\nDownload Folder : " + downloadPath);
                 fs.Write(info, 0, info.Length);
+            }
+        }
+
+        private int fileFormatToNumber(string format)
+        {
+            switch (format.Trim().ToLower())
+            {
+                case "audio": return 0;
+                case "mp3": return 1;
+                case "m4a": return 2;
+                case "flac": return 3;
+                case "aac": return 4;
+                case "wav": return 5;
+                case "vorbis": return 6;
+                case "opus": return 7;
+                case "video": return 8;
+                case "mp4": return 9;
+                case "webm": return 10;
+                case "3gp": return 11;
+            }
+
+            return -1;
+        }
+
+        private void downloadWorker_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
+        {
+            Process process = (Process) e.Argument;
+            process.Start();
+            StreamReader reader = process.StandardOutput;
+
+            while (reader.EndOfStream)
+            {
+                string outputLine = reader.ReadLine();
+                if (outputLine.Contains("]")) outputLine = outputLine.Split(']')[1];
+                outputLine = outputLine + "\r\n";
+                if (!outputLine.Contains("Microsoft") && !outputLine.Trim().Equals("")) outputBox.Text += outputLine;
+                outputBox.SelectionStart = outputBox.Text.Length;
+                outputBox.ScrollToCaret();  // https://www.youtube.com/watch?v=qgnd5JvpAFc https://www.youtube.com/watch?v=fc1tg9qkGyI
             }
         }
     }
 }
-
-/*
-// Set our event handler to asynchronously read the sort output.
-process.OutputDataReceived += new DataReceivedEventHandler(SortOutputHandler);
-
-// Redirect standard input as well.  This stream
-// is used synchronously.
-process.StartInfo.RedirectStandardInput = true;
-process.Start();
-
-// Use a stream writer to synchronously write the sort input.
-StreamWriter sortStreamWriter = process.StandardInput;
-
-// Start the asynchronous read of the sort output stream.
-process.BeginOutputReadLine();
-Console.WriteLine("Ready to sort up to 50 urls of text");
-String inputText;
-int numInputLines = 0;
-do
-{
-    Console.WriteLine("Enter a text line (or press the Enter key to stop):");
-
-    inputText = Console.ReadLine();
-    if (!String.IsNullOrEmpty(inputText))
-    {
-        numInputLines++;
-        sortStreamWriter.WriteLine(inputText);
-    }
-} while (true);
-*/
