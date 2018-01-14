@@ -34,71 +34,66 @@ namespace youtube_dl_gui
 
         private void dlButton_Click(object sender, EventArgs e)
         {
-            List<string> lines = new List<string>(inputBox.Lines);
+            dlButton.Enabled = false;
+            inputBox.ReadOnly = true;
 
-            string arg = START_OF_COMMAND + "--newline -o ";
-            if (downloadFolderComboBox.SelectedItem != null) arg += downloadFolderComboBox.SelectedItem.ToString();
-            arg += "%(title)s.%(ext)s ";
+            List<string> urls = new List<string>(inputBox.Lines);
+
+            string command = C_ARG + "--newline ";
+            if (downloadFolderComboBox.SelectedItem != null) command += "-o " + downloadFolderComboBox.SelectedItem.ToString();
+            command += "%(title)s.%(ext)s ";
             if (fileFormatComboBox.SelectedItem != null) switch (fileFormatComboBox.SelectedItem.ToString().Trim().ToLower())
                 {
-                    case "audio": arg += "-x "; break;
-                    case "mp3": arg += "-x --audio-format mp3 "; break;
-                    case "m4a": arg += "-x --audio-format m4a "; break;
-                    case "flac": arg += "-x --audio-format flac "; break;
-                    case "aac": arg += "-x --audio-format aac "; break;
-                    case "wav": arg += "-x --audio-format wav "; break;
-                    case "vorbis": arg += "-x --audio-format vorbis "; break;
-                    case "opus": arg += "-x --audio-format opus "; break;
+                    case "audio": command += "-x "; break;
+                    case "mp3": command += "-x --audio-format mp3 "; break;
+                    case "m4a": command += "-x --audio-format m4a "; break;
+                    case "flac": command += "-x --audio-format flac "; break;
+                    case "aac": command += "-x --audio-format aac "; break;
+                    case "wav": command += "-x --audio-format wav "; break;
+                    case "vorbis": command += "-x --audio-format vorbis "; break;
+                    case "opus": command += "-x --audio-format opus "; break;
                     case "video": break;
-                    case "mp4": arg += "-f mp4 "; break;
-                    case "webm": arg += "-f webm "; break;
-                    case "3gp": arg += "-f webm "; break;
+                    case "mp4": command += "-f mp4 "; break;
+                    case "webm": command += "-f webm "; break;
+                    case "3gp": command += "-f webm "; break;
                 }
 
             ProcessStartInfo startInfo = new ProcessStartInfo();
             startInfo.FileName = "cmd.exe";
             startInfo.UseShellExecute = false;
             startInfo.RedirectStandardOutput = true;
-            startInfo.RedirectStandardInput = true;
             startInfo.CreateNoWindow = true;
 
-            Process process = new Process();
-            process.StartInfo = startInfo;
-            process.Start();
+            while (urls.Count > 0)
+            {
+                string arg = urls[0];
+                urls.Remove(urls[0]);
+                inputBox.Lines = urls.ToArray();
+                Uri url = new Uri(arg);
 
-            while (lines.Count > 0)
-            { 
-                for (int i = 0; i < 3; i++) process.StandardOutput.ReadLine();
+                if (url.Scheme == Uri.UriSchemeHttp || url.Scheme == Uri.UriSchemeHttps) arg = command + "\"" + url + "\"";
+                else continue;
 
-                process.StandardInput.WriteLine(arg + "\"" + lines[0] + "\"");
-                lines.Remove(lines[0]);
-                inputBox.Lines = lines.ToArray();
+                startInfo.Arguments = arg;
+                Process process = new Process();
+                process.StartInfo = startInfo;
+                process.Start();
 
                 while (!process.StandardOutput.EndOfStream)
                 {
-                    string line = process.StandardOutput.ReadLine();
-                    if (line.Contains("]")) line = line.Split(']')[1];
-                    line = line + "\r\n";
-                    if (!line.Contains("Microsoft") && !line.Trim().Equals("")) outputBox.Text += line;
+                    string outputLine = process.StandardOutput.ReadLine();
+                    if (outputLine.Contains("]")) outputLine = outputLine.Split(']')[1];
+                    outputLine = outputLine + "\r\n";
+                    if (!outputLine.Contains("Microsoft") && !outputLine.Trim().Equals("")) outputBox.Text += outputLine;
                     outputBox.SelectionStart = outputBox.Text.Length;
                     outputBox.ScrollToCaret();  // https://www.youtube.com/watch?v=qgnd5JvpAFc 
                 }
 
-                //process.StandardInput.WriteLine("ping 8.8.8.8");
-
-                //process.StandardInput.WriteLine("cd Downloads");
-                //process.StandardInput.WriteLine("ls");
-                /*while (!process.StandardOutput.EndOfStream)
-                {
-                    string line = process.StandardOutput.ReadLine();
-                    line = line + "\r\n";
-                    if(!line.Contains("Microsoft") && !line.Trim().Equals("")) outputBox.Text += line;
-                    outputBox.SelectionStart = outputBox.Text.Length;
-                    outputBox.ScrollToCaret();
-                }*/     
+                process.Close();
             }
 
-            process.Close();
+            inputBox.ReadOnly = false;
+            dlButton.Enabled = true;
         }
 
         private void aboutMenuItem_Click(object sender, EventArgs e)
@@ -255,7 +250,7 @@ StreamWriter sortStreamWriter = process.StandardInput;
 
 // Start the asynchronous read of the sort output stream.
 process.BeginOutputReadLine();
-Console.WriteLine("Ready to sort up to 50 lines of text");
+Console.WriteLine("Ready to sort up to 50 urls of text");
 String inputText;
 int numInputLines = 0;
 do

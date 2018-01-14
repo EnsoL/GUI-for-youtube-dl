@@ -34,7 +34,11 @@
             this.inputBox = new System.Windows.Forms.TextBox();
             this.outputLabel = new System.Windows.Forms.Label();
             this.outputBox = new System.Windows.Forms.RichTextBox();
-            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.menuStrip = new System.Windows.Forms.MenuStrip();
+            this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.loadSettingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveSettingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.setToDefaultToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.updateMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -42,11 +46,7 @@
             this.fileFormatLabel = new System.Windows.Forms.Label();
             this.dlFolderLabel = new System.Windows.Forms.Label();
             this.downloadFolderComboBox = new System.Windows.Forms.ComboBox();
-            this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.loadSettingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.saveSettingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.setToDefaultToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.menuStrip1.SuspendLayout();
+            this.menuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
             // dlButton
@@ -95,16 +95,48 @@
             this.outputBox.TabIndex = 5;
             this.outputBox.Text = "";
             // 
-            // menuStrip1
+            // menuStrip
             // 
-            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menuStrip.BackColor = System.Drawing.SystemColors.AppWorkspace;
+            this.menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.settingsToolStripMenuItem,
             this.helpMenuItem});
-            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
-            this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(644, 24);
-            this.menuStrip1.TabIndex = 6;
-            this.menuStrip1.Text = "menuStrip1";
+            this.menuStrip.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip.Name = "menuStrip";
+            this.menuStrip.Size = new System.Drawing.Size(644, 24);
+            this.menuStrip.TabIndex = 6;
+            this.menuStrip.Text = "Menu";
+            // 
+            // settingsToolStripMenuItem
+            // 
+            this.settingsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.loadSettingsToolStripMenuItem,
+            this.saveSettingsToolStripMenuItem,
+            this.setToDefaultToolStripMenuItem});
+            this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
+            this.settingsToolStripMenuItem.Text = "&Settings";
+            // 
+            // loadSettingsToolStripMenuItem
+            // 
+            this.loadSettingsToolStripMenuItem.Name = "loadSettingsToolStripMenuItem";
+            this.loadSettingsToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
+            this.loadSettingsToolStripMenuItem.Text = "&Load settings";
+            this.loadSettingsToolStripMenuItem.Click += new System.EventHandler(this.loadSettingsToolStripMenuItem_Click);
+            // 
+            // saveSettingsToolStripMenuItem
+            // 
+            this.saveSettingsToolStripMenuItem.Name = "saveSettingsToolStripMenuItem";
+            this.saveSettingsToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
+            this.saveSettingsToolStripMenuItem.Text = "S&ave settings";
+            this.saveSettingsToolStripMenuItem.Click += new System.EventHandler(this.saveSettingsToolStripMenuItem_Click);
+            // 
+            // setToDefaultToolStripMenuItem
+            // 
+            this.setToDefaultToolStripMenuItem.Name = "setToDefaultToolStripMenuItem";
+            this.setToDefaultToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
+            this.setToDefaultToolStripMenuItem.Text = "Set to &Default";
+            this.setToDefaultToolStripMenuItem.Click += new System.EventHandler(this.setToDefaultToolStripMenuItem_Click);
             // 
             // helpMenuItem
             // 
@@ -118,14 +150,14 @@
             // aboutMenuItem
             // 
             this.aboutMenuItem.Name = "aboutMenuItem";
-            this.aboutMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.aboutMenuItem.Size = new System.Drawing.Size(112, 22);
             this.aboutMenuItem.Text = "&About";
             this.aboutMenuItem.Click += new System.EventHandler(this.aboutMenuItem_Click);
             // 
             // updateMenuItem
             // 
             this.updateMenuItem.Name = "updateMenuItem";
-            this.updateMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.updateMenuItem.Size = new System.Drawing.Size(112, 22);
             this.updateMenuItem.Text = "&Update";
             this.updateMenuItem.Click += new System.EventHandler(this.updateMenuItem_Click);
             // 
@@ -179,37 +211,6 @@
             this.downloadFolderComboBox.Size = new System.Drawing.Size(220, 21);
             this.downloadFolderComboBox.TabIndex = 10;
             // 
-            // settingsToolStripMenuItem
-            // 
-            this.settingsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.loadSettingsToolStripMenuItem,
-            this.saveSettingsToolStripMenuItem,
-            this.setToDefaultToolStripMenuItem});
-            this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
-            this.settingsToolStripMenuItem.Text = "&Settings";
-            // 
-            // loadSettingsToolStripMenuItem
-            // 
-            this.loadSettingsToolStripMenuItem.Name = "loadSettingsToolStripMenuItem";
-            this.loadSettingsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.loadSettingsToolStripMenuItem.Text = "&Load settings";
-            this.loadSettingsToolStripMenuItem.Click += new System.EventHandler(this.loadSettingsToolStripMenuItem_Click);
-            // 
-            // saveSettingsToolStripMenuItem
-            // 
-            this.saveSettingsToolStripMenuItem.Name = "saveSettingsToolStripMenuItem";
-            this.saveSettingsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.saveSettingsToolStripMenuItem.Text = "S&ave settings";
-            this.saveSettingsToolStripMenuItem.Click += new System.EventHandler(this.saveSettingsToolStripMenuItem_Click);
-            // 
-            // setToDefaultToolStripMenuItem
-            // 
-            this.setToDefaultToolStripMenuItem.Name = "setToDefaultToolStripMenuItem";
-            this.setToDefaultToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.setToDefaultToolStripMenuItem.Text = "Set to &Default";
-            this.setToDefaultToolStripMenuItem.Click += new System.EventHandler(this.setToDefaultToolStripMenuItem_Click);
-            // 
             // mainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -224,14 +225,14 @@
             this.Controls.Add(this.inputBox);
             this.Controls.Add(this.inputLabel);
             this.Controls.Add(this.dlButton);
-            this.Controls.Add(this.menuStrip1);
+            this.Controls.Add(this.menuStrip);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MainMenuStrip = this.menuStrip1;
+            this.MainMenuStrip = this.menuStrip;
             this.Name = "mainWindow";
             this.RightToLeftLayout = true;
             this.Text = "YouTube DL GUI";
-            this.menuStrip1.ResumeLayout(false);
-            this.menuStrip1.PerformLayout();
+            this.menuStrip.ResumeLayout(false);
+            this.menuStrip.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -244,7 +245,7 @@
         private System.Windows.Forms.TextBox inputBox;
         private System.Windows.Forms.Label outputLabel;
         private System.Windows.Forms.RichTextBox outputBox;
-        private System.Windows.Forms.MenuStrip menuStrip1;
+        private System.Windows.Forms.MenuStrip menuStrip;
         private System.Windows.Forms.ToolStripMenuItem helpMenuItem;
         private System.Windows.Forms.ToolStripMenuItem updateMenuItem;
         private System.Windows.Forms.ToolStripMenuItem aboutMenuItem;
