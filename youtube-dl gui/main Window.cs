@@ -213,7 +213,7 @@ namespace youtube_dl_gui
                         if (line[0].ToLower().Contains("download folder"))
                         {
                             downloadFolderComboBox.Items.Add(line[1]);
-                            downloadFolderComboBox.SelectedItem = line[1];
+                            downloadFolderComboBox.Text = line[1];
                         }
                     }
                 }

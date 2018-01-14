@@ -46,7 +46,6 @@
             this.fileFormatLabel = new System.Windows.Forms.Label();
             this.dlFolderLabel = new System.Windows.Forms.Label();
             this.downloadFolderComboBox = new System.Windows.Forms.ComboBox();
-            this.downloadWorker = new System.ComponentModel.BackgroundWorker();
             this.menuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -260,7 +259,6 @@
         private System.Windows.Forms.ToolStripMenuItem loadSettingsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem saveSettingsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem setToDefaultToolStripMenuItem;
-        private System.ComponentModel.BackgroundWorker downloadWorker;
     }
 }
 
