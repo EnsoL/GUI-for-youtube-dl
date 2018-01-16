@@ -46,6 +46,10 @@
             this.fileFormatLabel = new System.Windows.Forms.Label();
             this.dlFolderLabel = new System.Windows.Forms.Label();
             this.downloadFolderComboBox = new System.Windows.Forms.ComboBox();
+            this.geoBypass = new System.Windows.Forms.CheckBox();
+            this.writeThumbnail = new System.Windows.Forms.CheckBox();
+            this.writeSubs = new System.Windows.Forms.CheckBox();
+            this.writeAutoSubs = new System.Windows.Forms.CheckBox();
             this.menuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -213,11 +217,55 @@
             this.downloadFolderComboBox.Size = new System.Drawing.Size(220, 21);
             this.downloadFolderComboBox.TabIndex = 10;
             // 
+            // geoBypass
+            // 
+            this.geoBypass.AutoSize = true;
+            this.geoBypass.Location = new System.Drawing.Point(273, 196);
+            this.geoBypass.Name = "geoBypass";
+            this.geoBypass.Size = new System.Drawing.Size(174, 17);
+            this.geoBypass.TabIndex = 11;
+            this.geoBypass.Text = "Attempt to bypass geo blocking";
+            this.geoBypass.UseVisualStyleBackColor = true;
+            // 
+            // writeThumbnail
+            // 
+            this.writeThumbnail.AutoSize = true;
+            this.writeThumbnail.Location = new System.Drawing.Point(273, 220);
+            this.writeThumbnail.Name = "writeThumbnail";
+            this.writeThumbnail.Size = new System.Drawing.Size(147, 17);
+            this.writeThumbnail.TabIndex = 12;
+            this.writeThumbnail.Text = "Attempt to write thumbnail";
+            this.writeThumbnail.UseVisualStyleBackColor = true;
+            // 
+            // writeSubs
+            // 
+            this.writeSubs.AutoSize = true;
+            this.writeSubs.Location = new System.Drawing.Point(273, 244);
+            this.writeSubs.Name = "writeSubs";
+            this.writeSubs.Size = new System.Drawing.Size(124, 17);
+            this.writeSubs.TabIndex = 13;
+            this.writeSubs.Text = "Attempt to write subs";
+            this.writeSubs.UseVisualStyleBackColor = true;
+            // 
+            // writeAutoSubs
+            // 
+            this.writeAutoSubs.AutoSize = true;
+            this.writeAutoSubs.Location = new System.Drawing.Point(273, 268);
+            this.writeAutoSubs.Name = "writeAutoSubs";
+            this.writeAutoSubs.Size = new System.Drawing.Size(223, 17);
+            this.writeAutoSubs.TabIndex = 14;
+            this.writeAutoSubs.Text = "Attempt to write auto subs (YouTube only)";
+            this.writeAutoSubs.UseVisualStyleBackColor = true;
+            // 
             // mainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(644, 437);
+            this.Controls.Add(this.writeAutoSubs);
+            this.Controls.Add(this.writeSubs);
+            this.Controls.Add(this.writeThumbnail);
+            this.Controls.Add(this.geoBypass);
             this.Controls.Add(this.downloadFolderComboBox);
             this.Controls.Add(this.dlFolderLabel);
             this.Controls.Add(this.fileFormatLabel);
@@ -259,6 +307,10 @@
         private System.Windows.Forms.ToolStripMenuItem loadSettingsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem saveSettingsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem setToDefaultToolStripMenuItem;
+        private System.Windows.Forms.CheckBox geoBypass;
+        private System.Windows.Forms.CheckBox writeThumbnail;
+        private System.Windows.Forms.CheckBox writeSubs;
+        private System.Windows.Forms.CheckBox writeAutoSubs;
     }
 }
 

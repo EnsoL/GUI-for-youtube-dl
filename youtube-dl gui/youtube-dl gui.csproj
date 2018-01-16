@@ -67,6 +67,7 @@
     <Compile Include="About Window.Designer.cs">
       <DependentUpon>About Window.cs</DependentUpon>
     </Compile>
+    <Compile Include="CLIString.cs" />
     <Compile Include="main Window.cs">
       <SubType>Form</SubType>
     </Compile>

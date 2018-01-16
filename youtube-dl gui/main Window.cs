@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Configuration;
+using System.Text;
 using System.Diagnostics;
 using System.Collections.Generic;
 using System.Windows.Forms;
@@ -29,24 +29,34 @@ namespace youtube_dl_gui
 
             List<string> urls = new List<string>(inputBox.Lines);
 
-            string command = K_ARG + "--newline ";
-            if (downloadFolderComboBox.SelectedItem != null) command += "-o " + downloadFolderComboBox.SelectedItem.ToString();
-            command += "%(title)s.%(ext)s ";
+            //string command = K_ARG + "--newline ";
+            StringBuilder command = new StringBuilder(C_ARG + "--newline ");
+
             if (fileFormatComboBox.SelectedItem != null) switch (fileFormatComboBox.SelectedItem.ToString().Trim().ToLower())
-                {
-                    case "audio": command += "-x "; break;
-                    case "mp3": command += "-x --audio-format mp3 "; break;
-                    case "m4a": command += "-x --audio-format m4a "; break;
-                    case "flac": command += "-x --audio-format flac "; break;
-                    case "aac": command += "-x --audio-format aac "; break;
-                    case "wav": command += "-x --audio-format wav "; break;
-                    case "vorbis": command += "-x --audio-format vorbis "; break;
-                    case "opus": command += "-x --audio-format opus "; break;
-                    case "video": break;
-                    case "mp4": command += "-f mp4 "; break;
-                    case "webm": command += "-f webm "; break;
-                    case "3gp": command += "-f webm "; break;
-                }
+            {
+                case "audio": command.Append("-x URL "); break;
+                /*
+                case "mp3": command += "-x --audio-format mp3 "; break;
+                case "m4a": command += "-x --audio-format m4a "; break;
+                case "flac": command += "-x --audio-format flac "; break;
+                case "aac": command += "-x --audio-format aac "; break;
+                case "wav": command += "-x --audio-format wav "; break;
+                case "vorbis": command += "-x --audio-format vorbis "; break;
+                case "opus": command += "-x --audio-format opus "; break;
+                case "video": break;
+                case "mp4": command += "-f mp4 "; break;
+                case "webm": command += "-f webm "; break;
+                case "3gp": command += "-f webm "; break;
+                */
+            }
+            if (downloadFolderComboBox.SelectedItem != null) command.Append("-o " + downloadFolderComboBox.SelectedItem.ToString());
+            command.Append("%(title)s.%(ext)s ");
+
+            if (geoBypass.Checked) command.Append("--geo-bypass ");
+            //if (writeThumbnail.Checked) command += "--write-thumbnail ";
+            //if (writeAutoSubs.Checked && writeSubs.Checked) writeSubs.Checked = false;
+            //if (writeSubs.Checked) command += "--write-sub ";
+            //if (writeAutoSubs.Checked) command += "--write-auto-sub ";
 
             ProcessStartInfo startInfo = new ProcessStartInfo();
             startInfo.FileName = "cmd.exe";
@@ -60,14 +70,16 @@ namespace youtube_dl_gui
                 Uri url;
                 inputBox.Lines = urls.ToArray();
 
-
                 if (Uri.IsWellFormedUriString(arg, UriKind.Absolute)) url = new Uri(arg);
                 else continue;
 
-                if (url.Scheme == Uri.UriSchemeHttp || url.Scheme == Uri.UriSchemeHttps) arg = command + "\"" + url + "\"";
+                StringBuilder argument = new StringBuilder(command.ToString());
+                if (url.Scheme == Uri.UriSchemeHttp || url.Scheme == Uri.UriSchemeHttps) argument.Replace("URL", url.ToString());
                 else continue;
 
-                startInfo.Arguments = arg;
+                outputBox.Text += "\r\n---------------------------------------\r\n" + argument.ToString() + "\r\n---------------------------------------\r\n";
+
+                startInfo.Arguments = argument.ToString();
                 Process process = new Process();
                 process.StartInfo = startInfo;
 
@@ -76,11 +88,11 @@ namespace youtube_dl_gui
                 while (!process.StandardOutput.EndOfStream)
                 {
                     string outputLine = process.StandardOutput.ReadLine();
-                    if (outputLine.Contains("]")) outputLine = outputLine.Split(']')[1];
+                    //if (outputLine.Contains("]")) outputLine = outputLine.Split(']')[1];
                     outputLine = outputLine + "\r\n";
 
-                    if (!outputLine.Contains("Microsoft") && !outputLine.Trim().Equals("") &&
-                        !(outputLine.Contains(">") || outputLine.Contains(":\\"))) outputBox.Text += outputLine;
+                    /*if (!outputLine.Contains("Microsoft") && !outputLine.Trim().Equals("") &&
+                        !(outputLine.Contains(">") || outputLine.Contains(":\\"))) outputBox.Text += outputLine;*/
 
                     // Scrolls the textBox to the bottom.
                     outputBox.SelectionStart = outputBox.Text.Length;
