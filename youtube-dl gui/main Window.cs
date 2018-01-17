@@ -18,11 +18,9 @@ namespace youtube_dl_gui
 
         public mainWindow()
         {
+            System.Threading.Tasks.Task task = System.Threading.Tasks.Task.Factory.StartNew(updateVersionNumber);
             InitializeComponent();
             loadSettings();
-            //fileFormatComboBox.SelectedIndex = 0;
-            //downloadFolderComboBox.SelectedIndex = 0;
-            outputBox.Text += AppDomain.CurrentDomain.BaseDirectory + "settings.ini";
         }
 
         private void dlButton_Click(object sender, EventArgs e)
@@ -221,10 +219,6 @@ namespace youtube_dl_gui
                 while ((line[0] = reader.ReadLine()) != null)
                 {
                     line = line[0].Split('=');
-                    for(int i = 0; i < line.Length; i++)
-                    {
-                        outputBox.AppendText(i + ": " + line[i] + Environment.NewLine);
-                    }
 
                     if (line.Length == 2)
                     {
@@ -256,10 +250,11 @@ namespace youtube_dl_gui
             if (!File.Exists(AppDomain.CurrentDomain.BaseDirectory + "settings.ini")) createSettings();
             else
             {
-                StreamWriter writer = new StreamWriter(File.OpenWrite(AppDomain.CurrentDomain.BaseDirectory + "settings.ini"));
-                writer.WriteAsync("File Format = " + fileFormatComboBox.SelectedIndex + Environment.NewLine);
-                writer.WriteAsync("Download Folder = " + downloadFolderComboBox.SelectedText.Trim() + Environment.NewLine);
-                writer.Close();
+                FileStream stream = File.OpenWrite(AppDomain.CurrentDomain.BaseDirectory + "settings.ini");
+                Byte[] info = new System.Text.UTF8Encoding(true).GetBytes("File Format = " + fileFormatComboBox.SelectedIndex + Environment.NewLine
+                                                            + "Download Folder = " + downloadFolderComboBox.SelectedText.Trim() + Environment.NewLine);
+                stream.WriteAsync(info, 0, info.Length);
+                stream.Close();
             }
         }
 
@@ -270,6 +265,7 @@ namespace youtube_dl_gui
                 string downloadPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
                 Byte[] info = new System.Text.UTF8Encoding(true).GetBytes("File Format = " + fileFormatToNumber("Video") + Environment.NewLine + "Download Folder = " + downloadPath);
                 fs.Write(info, 0, info.Length);
+                fs.Close();
             }
         }
 
