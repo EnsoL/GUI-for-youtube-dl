@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using System.IO;
+using System.Threading;
 
 namespace youtube_dl_gui
 {
@@ -20,6 +21,7 @@ namespace youtube_dl_gui
             loadSettings();
             fileFormatComboBox.SelectedIndex = 0;
             downloadFolderComboBox.SelectedIndex = 0;
+            outputBox.Text += AppDomain.CurrentDomain.BaseDirectory + "settings.ini";
         }
 
         private void dlButton_Click(object sender, EventArgs e)
@@ -35,15 +37,16 @@ namespace youtube_dl_gui
             if (fileFormatComboBox.SelectedItem != null) switch (fileFormatComboBox.SelectedItem.ToString().Trim().ToLower())
             {
                 case "audio": command.Append("-x URL "); break;
-                /*
-                case "mp3": command += "-x --audio-format mp3 "; break;
+                case "mp3": command.Append("-x --audio-format mp3 URL "); break;
+                        /*
                 case "m4a": command += "-x --audio-format m4a "; break;
                 case "flac": command += "-x --audio-format flac "; break;
                 case "aac": command += "-x --audio-format aac "; break;
                 case "wav": command += "-x --audio-format wav "; break;
                 case "vorbis": command += "-x --audio-format vorbis "; break;
-                case "opus": command += "-x --audio-format opus "; break;
-                case "video": break;
+                case "opus": command += "-x --audio-format opus "; break;*/
+                case "video": command.Append("URL "); break;
+                        /*
                 case "mp4": command += "-f mp4 "; break;
                 case "webm": command += "-f webm "; break;
                 case "3gp": command += "-f webm "; break;
@@ -77,22 +80,23 @@ namespace youtube_dl_gui
                 if (url.Scheme == Uri.UriSchemeHttp || url.Scheme == Uri.UriSchemeHttps) argument.Replace("URL", url.ToString());
                 else continue;
 
-                outputBox.Text += "\r\n---------------------------------------\r\n" + argument.ToString() + "\r\n---------------------------------------\r\n";
+                outputBox.Text += "\r\n---------------------------------------------------------------------------------------------------------------------\r\n" + 
+                    argument.ToString() + "\r\n---------------------------------------------------------------------------------------------------------------------\r\n";
 
                 startInfo.Arguments = argument.ToString();
                 Process process = new Process();
                 process.StartInfo = startInfo;
 
                 process.Start();
-
-                while (!process.StandardOutput.EndOfStream)
+                
+                while (!process.StandardOutput.EndOfStream && !process.HasExited)
                 {
                     string outputLine = process.StandardOutput.ReadLine();
                     //if (outputLine.Contains("]")) outputLine = outputLine.Split(']')[1];
                     outputLine = outputLine + "\r\n";
 
-                    /*if (!outputLine.Contains("Microsoft") && !outputLine.Trim().Equals("") &&
-                        !(outputLine.Contains(">") || outputLine.Contains(":\\"))) outputBox.Text += outputLine;*/
+                    //if (!outputLine.Contains("Microsoft") && !outputLine.Trim().Equals("") &&
+                    //  !(outputLine.Contains(">") || outputLine.Contains(":\\"))) outputBox.Text += outputLine;
 
                     // Scrolls the textBox to the bottom.
                     outputBox.SelectionStart = outputBox.Text.Length;
@@ -209,12 +213,17 @@ namespace youtube_dl_gui
             if (!File.Exists(AppDomain.CurrentDomain.BaseDirectory + "settings.ini")) createSettings();
             else
             {
-                StreamReader reader = new StreamReader(File.OpenRead("settings.ini"));
+                StreamReader reader = new StreamReader(File.OpenRead(AppDomain.CurrentDomain.BaseDirectory + "settings.ini"));
                 string[] line;
 
                 while (reader.EndOfStream)
                 {
                     line = reader.ReadLine().Split(':');
+                    for(int i = 0; i < line.Length; i++)
+                    {
+                        outputBox.AppendText(i + ": " + line[i] + "\r\n");
+                    }
+
                     if (line.Length == 2)
                     {
                         if (line[0].ToLower().Contains("file format"))
@@ -239,7 +248,7 @@ namespace youtube_dl_gui
             if (!File.Exists(AppDomain.CurrentDomain.BaseDirectory + "settings.ini")) createSettings();
             else
             {
-                StreamWriter writer = new StreamWriter(File.OpenRead(AppDomain.CurrentDomain.BaseDirectory + "settings.ini"));
+                StreamWriter writer = new StreamWriter(File.OpenWrite(AppDomain.CurrentDomain.BaseDirectory + "settings.ini"));
                 writer.WriteAsync("file format : " + fileFormatComboBox.SelectedIndex);
                 writer.WriteAsync("download folder : " + downloadFolderComboBox.SelectedText);
                 writer.Close();

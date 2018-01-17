@@ -55,7 +55,7 @@
             // 
             // dlButton
             // 
-            this.dlButton.Location = new System.Drawing.Point(273, 400);
+            this.dlButton.Location = new System.Drawing.Point(273, 425);
             this.dlButton.Name = "dlButton";
             this.dlButton.Size = new System.Drawing.Size(97, 25);
             this.dlButton.TabIndex = 0;
@@ -95,7 +95,7 @@
             this.outputBox.Location = new System.Drawing.Point(14, 309);
             this.outputBox.Name = "outputBox";
             this.outputBox.ReadOnly = true;
-            this.outputBox.Size = new System.Drawing.Size(615, 85);
+            this.outputBox.Size = new System.Drawing.Size(615, 110);
             this.outputBox.TabIndex = 5;
             this.outputBox.Text = "";
             // 
@@ -261,7 +261,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(644, 437);
+            this.ClientSize = new System.Drawing.Size(644, 462);
             this.Controls.Add(this.writeAutoSubs);
             this.Controls.Add(this.writeSubs);
             this.Controls.Add(this.writeThumbnail);
