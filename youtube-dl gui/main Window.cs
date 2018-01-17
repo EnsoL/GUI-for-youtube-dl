@@ -18,8 +18,8 @@ namespace youtube_dl_gui
 
         public mainWindow()
         {
-            System.Threading.Tasks.Task task = System.Threading.Tasks.Task.Factory.StartNew(updateVersionNumber);
             InitializeComponent();
+            System.Threading.Tasks.Task updateVersionNumberAsyncTask = System.Threading.Tasks.Task.Factory.StartNew(() => updateVersionNumber());
             loadSettings();
         }
 
@@ -115,7 +115,11 @@ namespace youtube_dl_gui
 
         private void aboutMenuItem_Click(object sender, EventArgs e)
         {
-            if(currentVersion.Equals("")) updateVersionNumber();
+            if(currentVersion.Equals(""))
+            {
+                updateVersionNumber();
+                outputBox.AppendText("hsdakjhdsfkjhdfs");
+            }
             About about = new About(currentVersion);
             about.Show();
         }
