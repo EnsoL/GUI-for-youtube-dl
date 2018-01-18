@@ -23,6 +23,7 @@ namespace youtube_dl_gui
             if (fileFormatToNumber(fileFormatComboBox.SelectedText) >= fileFormatToNumber("Video")) keepBoth.Enabled = false;
         }
 
+        // TODO: Fix this, so this works, even when making a window, and redirecting the output stream.
         private void dlButton_Click(object sender, EventArgs e)
         {
             dlButton.Enabled = false;
@@ -109,7 +110,7 @@ namespace youtube_dl_gui
             about.Show();
         }
 
-        // This ain't working
+        // TODO: Fix this.
         private void updateMenuItem_Click(object sender, EventArgs e)
         {  
             ProcessStartInfo startInfo = new ProcessStartInfo();
