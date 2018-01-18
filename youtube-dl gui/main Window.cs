@@ -21,6 +21,7 @@ namespace youtube_dl_gui
             InitializeComponent();
             System.Threading.Tasks.Task updateVersionNumberAsyncTask = System.Threading.Tasks.Task.Factory.StartNew(() => updateVersionNumber());
             loadSettings();
+            if (fileFormatToNumber(fileFormatComboBox.SelectedText) >= fileFormatToNumber("Video")) keepBoth.Enabled = false;
         }
 
         private void dlButton_Click(object sender, EventArgs e)
@@ -51,6 +52,7 @@ namespace youtube_dl_gui
                 case "3gp": command += "-f webm "; break;
                 */
             }
+            if (keepBoth.Checked) command.Append("-k ");
             if (downloadFolderComboBox.SelectedItem != null) command.Append("-o " + downloadFolderComboBox.SelectedItem.ToString());
             command.Append("%(title)s.%(ext)s ");
 
@@ -292,6 +294,12 @@ namespace youtube_dl_gui
             }
 
             return -1;
+        }
+
+        private void fileFormatComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (fileFormatToNumber(fileFormatComboBox.SelectedText) >= fileFormatToNumber("Video")) keepBoth.Enabled = false;
+            else keepBoth.Enabled = true;
         }
     }
 }

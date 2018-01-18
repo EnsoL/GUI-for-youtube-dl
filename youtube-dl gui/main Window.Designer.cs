@@ -50,6 +50,7 @@
             this.writeThumbnail = new System.Windows.Forms.CheckBox();
             this.writeSubs = new System.Windows.Forms.CheckBox();
             this.writeAutoSubs = new System.Windows.Forms.CheckBox();
+            this.keepBoth = new System.Windows.Forms.CheckBox();
             this.menuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -183,8 +184,9 @@
             "  3gp"});
             this.fileFormatComboBox.Location = new System.Drawing.Point(15, 196);
             this.fileFormatComboBox.Name = "fileFormatComboBox";
-            this.fileFormatComboBox.Size = new System.Drawing.Size(121, 21);
+            this.fileFormatComboBox.Size = new System.Drawing.Size(122, 21);
             this.fileFormatComboBox.TabIndex = 7;
+            this.fileFormatComboBox.SelectedIndexChanged += new System.EventHandler(this.fileFormatComboBox_SelectedIndexChanged);
             // 
             // fileFormatLabel
             // 
@@ -257,11 +259,22 @@
             this.writeAutoSubs.Text = "Attempt to write auto subs (YouTube only)";
             this.writeAutoSubs.UseVisualStyleBackColor = true;
             // 
+            // keepBoth
+            // 
+            this.keepBoth.AutoSize = true;
+            this.keepBoth.Location = new System.Drawing.Point(155, 200);
+            this.keepBoth.Name = "keepBoth";
+            this.keepBoth.Size = new System.Drawing.Size(80, 17);
+            this.keepBoth.TabIndex = 15;
+            this.keepBoth.Text = "Keep video";
+            this.keepBoth.UseVisualStyleBackColor = true;
+            // 
             // mainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(644, 462);
+            this.Controls.Add(this.keepBoth);
             this.Controls.Add(this.writeAutoSubs);
             this.Controls.Add(this.writeSubs);
             this.Controls.Add(this.writeThumbnail);
@@ -311,6 +324,7 @@
         private System.Windows.Forms.CheckBox writeThumbnail;
         private System.Windows.Forms.CheckBox writeSubs;
         private System.Windows.Forms.CheckBox writeAutoSubs;
+        private System.Windows.Forms.CheckBox keepBoth;
     }
 }
 

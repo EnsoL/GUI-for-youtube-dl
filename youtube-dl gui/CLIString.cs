@@ -70,6 +70,11 @@ namespace youtube_dl_gui
             return true;
         }
 
+        public bool addKeepBoth()
+        {
+            return addOption("-k ");
+        }
+
         public bool addDownloadLocation(string location)
         {
             return addOption("-o " + location + "%(title)s.%(ext)s ");
