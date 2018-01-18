@@ -75,9 +75,12 @@
             // 
             // inputBox
             // 
+            this.inputBox.AllowDrop = true;
+            this.inputBox.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.inputBox.Location = new System.Drawing.Point(14, 46);
             this.inputBox.Multiline = true;
             this.inputBox.Name = "inputBox";
+            this.inputBox.ScrollBars = System.Windows.Forms.ScrollBars.Both;
             this.inputBox.Size = new System.Drawing.Size(615, 127);
             this.inputBox.TabIndex = 2;
             // 
@@ -125,22 +128,22 @@
             // loadSettingsToolStripMenuItem
             // 
             this.loadSettingsToolStripMenuItem.Name = "loadSettingsToolStripMenuItem";
-            this.loadSettingsToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
+            this.loadSettingsToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
             this.loadSettingsToolStripMenuItem.Text = "&Load settings";
             this.loadSettingsToolStripMenuItem.Click += new System.EventHandler(this.loadSettingsToolStripMenuItem_Click);
             // 
             // saveSettingsToolStripMenuItem
             // 
             this.saveSettingsToolStripMenuItem.Name = "saveSettingsToolStripMenuItem";
-            this.saveSettingsToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
+            this.saveSettingsToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
             this.saveSettingsToolStripMenuItem.Text = "S&ave settings";
             this.saveSettingsToolStripMenuItem.Click += new System.EventHandler(this.saveSettingsToolStripMenuItem_Click);
             // 
             // setToDefaultToolStripMenuItem
             // 
             this.setToDefaultToolStripMenuItem.Name = "setToDefaultToolStripMenuItem";
-            this.setToDefaultToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
-            this.setToDefaultToolStripMenuItem.Text = "Set to &Default";
+            this.setToDefaultToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
+            this.setToDefaultToolStripMenuItem.Text = "&Reset to Default";
             this.setToDefaultToolStripMenuItem.Click += new System.EventHandler(this.setToDefaultToolStripMenuItem_Click);
             // 
             // helpMenuItem
@@ -155,19 +158,20 @@
             // aboutMenuItem
             // 
             this.aboutMenuItem.Name = "aboutMenuItem";
-            this.aboutMenuItem.Size = new System.Drawing.Size(112, 22);
+            this.aboutMenuItem.Size = new System.Drawing.Size(152, 22);
             this.aboutMenuItem.Text = "&About";
             this.aboutMenuItem.Click += new System.EventHandler(this.aboutMenuItem_Click);
             // 
             // updateMenuItem
             // 
             this.updateMenuItem.Name = "updateMenuItem";
-            this.updateMenuItem.Size = new System.Drawing.Size(112, 22);
+            this.updateMenuItem.Size = new System.Drawing.Size(152, 22);
             this.updateMenuItem.Text = "&Update";
             this.updateMenuItem.Click += new System.EventHandler(this.updateMenuItem_Click);
             // 
             // fileFormatComboBox
             // 
+            this.fileFormatComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.fileFormatComboBox.FormattingEnabled = true;
             this.fileFormatComboBox.Items.AddRange(new object[] {
             "Audio",
@@ -248,6 +252,7 @@
             this.writeSubs.TabIndex = 13;
             this.writeSubs.Text = "Attempt to write subs";
             this.writeSubs.UseVisualStyleBackColor = true;
+            this.writeSubs.CheckedChanged += new System.EventHandler(this.writeSubs_CheckedChanged);
             // 
             // writeAutoSubs
             // 
@@ -258,6 +263,7 @@
             this.writeAutoSubs.TabIndex = 14;
             this.writeAutoSubs.Text = "Attempt to write auto subs (YouTube only)";
             this.writeAutoSubs.UseVisualStyleBackColor = true;
+            this.writeAutoSubs.CheckedChanged += new System.EventHandler(this.writeAutoSubs_CheckedChanged);
             // 
             // keepBoth
             // 

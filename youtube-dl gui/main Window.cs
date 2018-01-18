@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using System.IO;
-using System.Threading;
 using System.Text.RegularExpressions;
 
 namespace youtube_dl_gui
@@ -31,65 +30,50 @@ namespace youtube_dl_gui
 
             List<string> urls = new List<string>(inputBox.Lines);
 
-            //string command = K_ARG + "--newline ";
-            StringBuilder command = new StringBuilder(C_ARG + "--newline ");
+            CLIString command = new CLIString();
+            command.createPlaceholderStartOfCommand();
+        
+            command.addFileFormat(fileFormatComboBox.SelectedItem.ToString());
+            if (keepBoth.Checked && keepBoth.Enabled) command.addKeepBoth();
+            command.addDownloadLocation(downloadFolderComboBox.SelectedItem.ToString());
 
-            if (fileFormatComboBox.SelectedItem != null) switch (fileFormatComboBox.SelectedItem.ToString().Trim().ToLower())
-            {
-                case "audio": command.Append("-x URL "); break;
-                case "mp3": command.Append("-x --audio-format mp3 URL "); break;
-                        /*
-                case "m4a": command += "-x --audio-format m4a "; break;
-                case "flac": command += "-x --audio-format flac "; break;
-                case "aac": command += "-x --audio-format aac "; break;
-                case "wav": command += "-x --audio-format wav "; break;
-                case "vorbis": command += "-x --audio-format vorbis "; break;
-                case "opus": command += "-x --audio-format opus "; break;*/
-                case "video": command.Append("URL "); break;
-                        /*
-                case "mp4": command += "-f mp4 "; break;
-                case "webm": command += "-f webm "; break;
-                case "3gp": command += "-f webm "; break;
-                */
-            }
-            if (keepBoth.Checked) command.Append("-k ");
-            if (downloadFolderComboBox.SelectedItem != null) command.Append("-o " + downloadFolderComboBox.SelectedItem.ToString());
-            command.Append("%(title)s.%(ext)s ");
-
-            if (geoBypass.Checked) command.Append("--geo-bypass ");
-            //if (writeThumbnail.Checked) command += "--write-thumbnail ";
-            //if (writeAutoSubs.Checked && writeSubs.Checked) writeSubs.Checked = false;
-            //if (writeSubs.Checked) command += "--write-sub ";
-            //if (writeAutoSubs.Checked) command += "--write-auto-sub ";
+            if (geoBypass.Checked) command.addGeoBypass();
+            if (writeThumbnail.Checked) command.addThumbnail();
+            if (writeSubs.Checked) command.addWriteSubs();
+            if (writeAutoSubs.Checked) command.addWriteAutoSubs();
 
             ProcessStartInfo startInfo = new ProcessStartInfo();
             startInfo.FileName = "cmd.exe";
             startInfo.UseShellExecute = false;
-            startInfo.RedirectStandardOutput = true;
-            startInfo.CreateNoWindow = true;
+            //startInfo.RedirectStandardOutput = true;
+            //startInfo.CreateNoWindow = true;
 
             while (urls.Count > 0)
             {
-                string arg = urls[0].Trim();
-                Uri url;
+                CLIString argument = new CLIString(command);
+                string url = urls[0].Trim();
                 inputBox.Lines = urls.ToArray();
-
-                if (Uri.IsWellFormedUriString(arg, UriKind.Absolute)) url = new Uri(arg);
-                else continue;
-
-                StringBuilder argument = new StringBuilder(command.ToString());
-                if (url.Scheme == Uri.UriSchemeHttp || url.Scheme == Uri.UriSchemeHttps) argument.Replace("URL", url.ToString());
-                else continue;
+                if (!argument.addUrl(url))
+                {
+                    outputBox.AppendText("Failed to add URL to argument: addUrl failed" + Environment.NewLine);
+                    goto EXIT;
+                }
+                if (!argument.isAtleastABaseCommand())
+                {
+                    outputBox.AppendText("The argument for youtube-dl is incomplete: " + argument.ToString() + Environment.NewLine);
+                    goto EXIT;
+                }
 
                 outputBox.Text += "\r\n---------------------------------------------------------------------------------------------------------------------\r\n" + 
                     argument.ToString() + "\r\n---------------------------------------------------------------------------------------------------------------------\r\n";
 
-                startInfo.Arguments = argument.ToString();
+                startInfo.Arguments = "/K" + argument.ToString();
                 Process process = new Process();
                 process.StartInfo = startInfo;
 
                 process.Start();
-                
+                /* Godamm, it doesn't work when I redirect the output stream and make no window.
+                 * I think it's due to the process being closed early.
                 while (!process.StandardOutput.EndOfStream && !process.HasExited)
                 {
                     string outputLine = process.StandardOutput.ReadLine();
@@ -103,14 +87,13 @@ namespace youtube_dl_gui
                     outputBox.SelectionStart = outputBox.Text.Length;
                     outputBox.ScrollToCaret();  // https://www.youtube.com/watch?v=qgnd5JvpAFc https://www.youtube.com/watch?v=fc1tg9qkGyI
                 }
-
-                process.Close();
-
+                */
                 // This is last, so that only after something is downloaded, it's removed from the list.
                 urls.Remove(urls[0]);
                 inputBox.Lines = urls.ToArray();
+                process.Close();
             }
-
+        EXIT:
             inputBox.ReadOnly = false;
             dlButton.Enabled = true;
         }
@@ -211,7 +194,7 @@ namespace youtube_dl_gui
         private void setToDefaultToolStripMenuItem_Click(object sender, EventArgs e)
         {
             createSettings();
-            //loadSettings(); // Decomment when it works.
+            loadSettings();
         }
 
         private void loadSettings()
@@ -298,8 +281,18 @@ namespace youtube_dl_gui
 
         private void fileFormatComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (fileFormatToNumber(fileFormatComboBox.SelectedText) >= fileFormatToNumber("Video")) keepBoth.Enabled = false;
+            if (fileFormatComboBox.SelectedIndex >= fileFormatToNumber("Video")) keepBoth.Enabled = false;
             else keepBoth.Enabled = true;
+        }
+
+        private void writeAutoSubs_CheckedChanged(object sender, EventArgs e)
+        {
+            if (writeSubs.Checked && writeAutoSubs.Checked) writeSubs.Checked = false;
+        }
+
+        private void writeSubs_CheckedChanged(object sender, EventArgs e)
+        {
+            if (writeSubs.Checked && writeAutoSubs.Checked) writeAutoSubs.Checked = false;
         }
     }
 }
