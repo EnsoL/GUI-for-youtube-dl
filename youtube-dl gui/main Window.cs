@@ -18,9 +18,16 @@ namespace youtube_dl_gui
         public mainWindow()
         {
             InitializeComponent();
+
             System.Threading.Tasks.Task updateVersionNumberAsyncTask = System.Threading.Tasks.Task.Factory.StartNew(() => updateVersionNumber());
-            loadSettings();
             if (fileFormatToNumber(fileFormatComboBox.SelectedText) >= fileFormatToNumber("Video")) keepBoth.Enabled = false;
+
+            downloadFolderComboBox.Items.Add(Environment.GetFolderPath(Environment.SpecialFolder.Desktop));
+            downloadFolderComboBox.Items.Add(Environment.GetFolderPath(Environment.SpecialFolder.Desktop).ToString().Replace("Desktop", "Downloads"));
+            downloadFolderComboBox.Items.Add(Environment.GetFolderPath(Environment.SpecialFolder.MyMusic));
+            downloadFolderComboBox.Items.Add(Environment.GetFolderPath(Environment.SpecialFolder.MyVideos));
+
+            loadSettings();
         }
 
         // TODO: Fix this, so this works, even when making a window, and redirecting the output stream.
@@ -201,51 +208,48 @@ namespace youtube_dl_gui
         private void loadSettings()
         {
             if (!File.Exists(AppDomain.CurrentDomain.BaseDirectory + "settings.ini")) createSettings();
-            else
+
+            StreamReader reader = new StreamReader(File.OpenRead(AppDomain.CurrentDomain.BaseDirectory + "settings.ini"));
+            string[] line = new string[1];
+
+            while ((line[0] = reader.ReadLine()) != null)
             {
-                StreamReader reader = new StreamReader(File.OpenRead(AppDomain.CurrentDomain.BaseDirectory + "settings.ini"));
-                string[] line = new string[1];
+                line = line[0].Split('=');
 
-                while ((line[0] = reader.ReadLine()) != null)
+                if (line.Length == 2)
                 {
-                    line = line[0].Split('=');
-
-                    if (line.Length == 2)
+                    if (line[0].ToLower().Contains("file format"))
                     {
-                        if (line[0].ToLower().Contains("file format"))
-                        {
-                            int format;
-                            line[1] = line[1].Trim().ToLower();
+                        int format;
+                        line[1] = line[1].Trim().ToLower();
 
-                            if (Regex.IsMatch(line[1], @"^[0-9]$")) format = int.Parse(line[1]);
-                            else format = fileFormatToNumber(line[1]);
+                        if (Regex.IsMatch(line[1], @"^[0-9]$")) format = int.Parse(line[1]);
+                        else format = fileFormatToNumber(line[1]);
 
-                            if (format >= 0 && format <= 11) fileFormatComboBox.SelectedIndex = format;
-                            else outputBox.AppendText("Didn't load file type from settings." + Environment.NewLine);
-                        }
-                        if (line[0].ToLower().Contains("download folder"))
-                        {
-                            downloadFolderComboBox.Items.Add(line[1]);
-                            downloadFolderComboBox.Text = line[1];
-                        }
+                        if (format >= 0 && format <= 11) fileFormatComboBox.SelectedIndex = format;
+                        else outputBox.AppendText("Didn't load file type from settings." + Environment.NewLine);
+                    }
+                    if (line[0].ToLower().Contains("download folder"))
+                    {
+                        line[1] = line[1].Trim();
+                        downloadFolderComboBox.Items.Add(line[1]);
+                        downloadFolderComboBox.Text = line[1];
                     }
                 }
-                
-                reader.Close();
             }
+                
+            reader.Close();
         }
 
         private void setSettings()
         {
             if (!File.Exists(AppDomain.CurrentDomain.BaseDirectory + "settings.ini")) createSettings();
-            else
-            {
-                FileStream stream = File.OpenWrite(AppDomain.CurrentDomain.BaseDirectory + "settings.ini");
-                Byte[] info = new System.Text.UTF8Encoding(true).GetBytes("File Format = " + fileFormatComboBox.SelectedIndex + Environment.NewLine
-                                                            + "Download Folder = " + downloadFolderComboBox.SelectedText.Trim() + Environment.NewLine);
-                stream.WriteAsync(info, 0, info.Length);
-                stream.Close();
-            }
+            
+            FileStream stream = File.OpenWrite(AppDomain.CurrentDomain.BaseDirectory + "settings.ini");
+            Byte[] info = new System.Text.UTF8Encoding(true).GetBytes("File Format = " + fileFormatComboBox.SelectedIndex + Environment.NewLine
+                                                        + "Download Folder = " + downloadFolderComboBox.SelectedText.Trim() + Environment.NewLine);
+            stream.WriteAsync(info, 0, info.Length);
+            stream.Close();
         }
 
         private void createSettings()

@@ -213,11 +213,6 @@
             // downloadFolderComboBox
             // 
             this.downloadFolderComboBox.FormattingEnabled = true;
-            this.downloadFolderComboBox.Items.AddRange(new object[] {
-            "C:\\Users\\Enso\\Desktop\\",
-            "C:\\Users\\Enso\\Downloads\\",
-            "C:\\Users\\Enso\\Music\\",
-            "C:\\Users\\Enso\\Videos\\"});
             this.downloadFolderComboBox.Location = new System.Drawing.Point(15, 248);
             this.downloadFolderComboBox.Name = "downloadFolderComboBox";
             this.downloadFolderComboBox.Size = new System.Drawing.Size(220, 21);
