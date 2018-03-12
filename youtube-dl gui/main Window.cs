@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Text;
 using System.Diagnostics;
 using System.Collections.Generic;
 using System.Windows.Forms;
@@ -11,7 +10,8 @@ using System.Threading.Tasks;
  * TODO:
  * -Fix the download function.
  * -Create a working update function.
- * -Work on settings
+ * -Create proper settings.
+ * -Add support for window resizing.
  */
 
 namespace youtube_dl_gui

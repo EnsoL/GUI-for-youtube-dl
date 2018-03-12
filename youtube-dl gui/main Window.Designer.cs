@@ -46,13 +46,13 @@
             this.fileFormatLabel = new System.Windows.Forms.Label();
             this.dlFolderLabel = new System.Windows.Forms.Label();
             this.downloadFolderComboBox = new System.Windows.Forms.ComboBox();
-            this.geoBypass = new System.Windows.Forms.CheckBox();
-            this.writeThumbnail = new System.Windows.Forms.CheckBox();
-            this.writeSubs = new System.Windows.Forms.CheckBox();
-            this.writeAutoSubs = new System.Windows.Forms.CheckBox();
-            this.keepBoth = new System.Windows.Forms.CheckBox();
             this.folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.openFolderButton = new System.Windows.Forms.Button();
+            this.keepBoth = new System.Windows.Forms.CheckBox();
+            this.writeAutoSubs = new System.Windows.Forms.CheckBox();
+            this.writeSubs = new System.Windows.Forms.CheckBox();
+            this.writeThumbnail = new System.Windows.Forms.CheckBox();
+            this.geoBypass = new System.Windows.Forms.CheckBox();
             this.menuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -220,58 +220,6 @@
             this.downloadFolderComboBox.Size = new System.Drawing.Size(238, 21);
             this.downloadFolderComboBox.TabIndex = 10;
             // 
-            // geoBypass
-            // 
-            this.geoBypass.AutoSize = true;
-            this.geoBypass.Location = new System.Drawing.Point(297, 196);
-            this.geoBypass.Name = "geoBypass";
-            this.geoBypass.Size = new System.Drawing.Size(174, 17);
-            this.geoBypass.TabIndex = 11;
-            this.geoBypass.Text = "Attempt to bypass geo blocking";
-            this.geoBypass.UseVisualStyleBackColor = true;
-            // 
-            // writeThumbnail
-            // 
-            this.writeThumbnail.AutoSize = true;
-            this.writeThumbnail.Location = new System.Drawing.Point(297, 220);
-            this.writeThumbnail.Name = "writeThumbnail";
-            this.writeThumbnail.Size = new System.Drawing.Size(147, 17);
-            this.writeThumbnail.TabIndex = 12;
-            this.writeThumbnail.Text = "Attempt to write thumbnail";
-            this.writeThumbnail.UseVisualStyleBackColor = true;
-            // 
-            // writeSubs
-            // 
-            this.writeSubs.AutoSize = true;
-            this.writeSubs.Location = new System.Drawing.Point(297, 244);
-            this.writeSubs.Name = "writeSubs";
-            this.writeSubs.Size = new System.Drawing.Size(140, 17);
-            this.writeSubs.TabIndex = 13;
-            this.writeSubs.Text = "Attempt to write subtitles";
-            this.writeSubs.UseVisualStyleBackColor = true;
-            this.writeSubs.CheckedChanged += new System.EventHandler(this.writeSubs_CheckedChanged);
-            // 
-            // writeAutoSubs
-            // 
-            this.writeAutoSubs.AutoSize = true;
-            this.writeAutoSubs.Location = new System.Drawing.Point(297, 268);
-            this.writeAutoSubs.Name = "writeAutoSubs";
-            this.writeAutoSubs.Size = new System.Drawing.Size(241, 17);
-            this.writeAutoSubs.TabIndex = 14;
-            this.writeAutoSubs.Text = "Attempt to write auto subtitless(YouTube only)";
-            this.writeAutoSubs.UseVisualStyleBackColor = true;
-            this.writeAutoSubs.CheckedChanged += new System.EventHandler(this.writeAutoSubs_CheckedChanged);
-            // 
-            // keepBoth
-            // 
-            this.keepBoth.AutoSize = true;
-            this.keepBoth.Location = new System.Drawing.Point(147, 200);
-            this.keepBoth.Name = "keepBoth";
-            this.keepBoth.Size = new System.Drawing.Size(130, 17);
-            this.keepBoth.TabIndex = 15;
-            this.keepBoth.Text = "Save audio and video";
-            this.keepBoth.UseVisualStyleBackColor = true;
-            // 
             // folderBrowserDialog
             // 
             this.folderBrowserDialog.RootFolder = System.Environment.SpecialFolder.MyComputer;
@@ -285,6 +233,68 @@
             this.openFolderButton.Text = "*";
             this.openFolderButton.UseVisualStyleBackColor = true;
             this.openFolderButton.Click += new System.EventHandler(this.openFolderButton_Click);
+            // 
+            // keepBoth
+            // 
+            this.keepBoth.AutoSize = true;
+            this.keepBoth.Checked = global::youtube_dl_gui.Properties.Settings.Default.keepBothChecked;
+            this.keepBoth.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::youtube_dl_gui.Properties.Settings.Default, "keepBothChecked", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.keepBoth.Location = new System.Drawing.Point(147, 200);
+            this.keepBoth.Name = "keepBoth";
+            this.keepBoth.Size = new System.Drawing.Size(130, 17);
+            this.keepBoth.TabIndex = 15;
+            this.keepBoth.Text = "Save audio and video";
+            this.keepBoth.UseVisualStyleBackColor = true;
+            // 
+            // writeAutoSubs
+            // 
+            this.writeAutoSubs.AutoSize = true;
+            this.writeAutoSubs.Checked = global::youtube_dl_gui.Properties.Settings.Default.writeAutoSubsChecked;
+            this.writeAutoSubs.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::youtube_dl_gui.Properties.Settings.Default, "writeAutoSubsChecked", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.writeAutoSubs.Location = new System.Drawing.Point(297, 268);
+            this.writeAutoSubs.Name = "writeAutoSubs";
+            this.writeAutoSubs.Size = new System.Drawing.Size(241, 17);
+            this.writeAutoSubs.TabIndex = 14;
+            this.writeAutoSubs.Text = "Attempt to write auto subtitless(YouTube only)";
+            this.writeAutoSubs.UseVisualStyleBackColor = true;
+            this.writeAutoSubs.CheckedChanged += new System.EventHandler(this.writeAutoSubs_CheckedChanged);
+            // 
+            // writeSubs
+            // 
+            this.writeSubs.AutoSize = true;
+            this.writeSubs.Checked = global::youtube_dl_gui.Properties.Settings.Default.writeSubsChecked;
+            this.writeSubs.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::youtube_dl_gui.Properties.Settings.Default, "writeSubsChecked", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.writeSubs.Location = new System.Drawing.Point(297, 244);
+            this.writeSubs.Name = "writeSubs";
+            this.writeSubs.Size = new System.Drawing.Size(140, 17);
+            this.writeSubs.TabIndex = 13;
+            this.writeSubs.Text = "Attempt to write subtitles";
+            this.writeSubs.UseVisualStyleBackColor = true;
+            this.writeSubs.CheckedChanged += new System.EventHandler(this.writeSubs_CheckedChanged);
+            // 
+            // writeThumbnail
+            // 
+            this.writeThumbnail.AutoSize = true;
+            this.writeThumbnail.Checked = global::youtube_dl_gui.Properties.Settings.Default.writeThumbnailChecked;
+            this.writeThumbnail.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::youtube_dl_gui.Properties.Settings.Default, "writeThumbnailChecked", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.writeThumbnail.Location = new System.Drawing.Point(297, 220);
+            this.writeThumbnail.Name = "writeThumbnail";
+            this.writeThumbnail.Size = new System.Drawing.Size(147, 17);
+            this.writeThumbnail.TabIndex = 12;
+            this.writeThumbnail.Text = "Attempt to write thumbnail";
+            this.writeThumbnail.UseVisualStyleBackColor = true;
+            // 
+            // geoBypass
+            // 
+            this.geoBypass.AutoSize = true;
+            this.geoBypass.Checked = global::youtube_dl_gui.Properties.Settings.Default.geoBypassChecked;
+            this.geoBypass.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::youtube_dl_gui.Properties.Settings.Default, "geoBypassChecked", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.geoBypass.Location = new System.Drawing.Point(297, 196);
+            this.geoBypass.Name = "geoBypass";
+            this.geoBypass.Size = new System.Drawing.Size(174, 17);
+            this.geoBypass.TabIndex = 11;
+            this.geoBypass.Text = "Attempt to bypass geo blocking";
+            this.geoBypass.UseVisualStyleBackColor = true;
             // 
             // mainWindow
             // 
