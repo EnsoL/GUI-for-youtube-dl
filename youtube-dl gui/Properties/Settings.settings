@@ -17,5 +17,11 @@
     <Setting Name="writeAutoSubsChecked" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
+    <Setting Name="fileFormat" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Audio</Value>
+    </Setting>
+    <Setting Name="downloadFolder" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
   </Settings>
 </SettingsFile>

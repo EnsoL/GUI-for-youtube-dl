@@ -42,7 +42,6 @@
             this.helpMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.updateMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.fileFormatComboBox = new System.Windows.Forms.ComboBox();
             this.fileFormatLabel = new System.Windows.Forms.Label();
             this.dlFolderLabel = new System.Windows.Forms.Label();
             this.downloadFolderComboBox = new System.Windows.Forms.ComboBox();
@@ -53,6 +52,7 @@
             this.writeSubs = new System.Windows.Forms.CheckBox();
             this.writeThumbnail = new System.Windows.Forms.CheckBox();
             this.geoBypass = new System.Windows.Forms.CheckBox();
+            this.fileFormatComboBox = new System.Windows.Forms.ComboBox();
             this.menuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -171,29 +171,6 @@
             this.updateMenuItem.Text = "&Update";
             this.updateMenuItem.Click += new System.EventHandler(this.updateMenuItem_Click);
             // 
-            // fileFormatComboBox
-            // 
-            this.fileFormatComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.fileFormatComboBox.FormattingEnabled = true;
-            this.fileFormatComboBox.Items.AddRange(new object[] {
-            "Audio",
-            "  mp3",
-            "  m4a",
-            "  flac",
-            "  aac",
-            "  wav",
-            "  vorbis",
-            "  opus",
-            "Video",
-            "  mp4",
-            "  webm",
-            "  3gp"});
-            this.fileFormatComboBox.Location = new System.Drawing.Point(15, 196);
-            this.fileFormatComboBox.Name = "fileFormatComboBox";
-            this.fileFormatComboBox.Size = new System.Drawing.Size(122, 21);
-            this.fileFormatComboBox.TabIndex = 7;
-            this.fileFormatComboBox.SelectedIndexChanged += new System.EventHandler(this.fileFormatComboBox_SelectedIndexChanged);
-            // 
             // fileFormatLabel
             // 
             this.fileFormatLabel.AutoSize = true;
@@ -214,11 +191,13 @@
             // 
             // downloadFolderComboBox
             // 
+            this.downloadFolderComboBox.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::youtube_dl_gui.Properties.Settings.Default, "downloadFolder", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.downloadFolderComboBox.FormattingEnabled = true;
             this.downloadFolderComboBox.Location = new System.Drawing.Point(15, 240);
             this.downloadFolderComboBox.Name = "downloadFolderComboBox";
             this.downloadFolderComboBox.Size = new System.Drawing.Size(238, 21);
             this.downloadFolderComboBox.TabIndex = 10;
+            this.downloadFolderComboBox.Text = global::youtube_dl_gui.Properties.Settings.Default.downloadFolder;
             // 
             // folderBrowserDialog
             // 
@@ -296,6 +275,31 @@
             this.geoBypass.Text = "Attempt to bypass geo blocking";
             this.geoBypass.UseVisualStyleBackColor = true;
             // 
+            // fileFormatComboBox
+            // 
+            this.fileFormatComboBox.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::youtube_dl_gui.Properties.Settings.Default, "fileFormat", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.fileFormatComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.fileFormatComboBox.FormattingEnabled = true;
+            this.fileFormatComboBox.Items.AddRange(new object[] {
+            "Audio",
+            "  mp3",
+            "  m4a",
+            "  flac",
+            "  aac",
+            "  wav",
+            "  vorbis",
+            "  opus",
+            "Video",
+            "  mp4",
+            "  webm",
+            "  3gp"});
+            this.fileFormatComboBox.Location = new System.Drawing.Point(15, 196);
+            this.fileFormatComboBox.Name = "fileFormatComboBox";
+            this.fileFormatComboBox.Size = new System.Drawing.Size(122, 21);
+            this.fileFormatComboBox.TabIndex = 7;
+            this.fileFormatComboBox.Text = global::youtube_dl_gui.Properties.Settings.Default.fileFormat;
+            this.fileFormatComboBox.SelectedIndexChanged += new System.EventHandler(this.fileFormatComboBox_SelectedIndexChanged);
+            // 
             // mainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -340,7 +344,6 @@
         private System.Windows.Forms.ToolStripMenuItem helpMenuItem;
         private System.Windows.Forms.ToolStripMenuItem updateMenuItem;
         private System.Windows.Forms.ToolStripMenuItem aboutMenuItem;
-        private System.Windows.Forms.ComboBox fileFormatComboBox;
         private System.Windows.Forms.Label fileFormatLabel;
         private System.Windows.Forms.Label dlFolderLabel;
         private System.Windows.Forms.ComboBox downloadFolderComboBox;
@@ -355,6 +358,7 @@
         private System.Windows.Forms.CheckBox keepBoth;
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog;
         private System.Windows.Forms.Button openFolderButton;
+        private System.Windows.Forms.ComboBox fileFormatComboBox;
     }
 }
 

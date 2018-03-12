@@ -10,7 +10,8 @@ using System.Threading.Tasks;
  * TODO:
  * -Fix the download function.
  * -Create a working update function.
- * -Create proper settings.
+ * -Create proper settings. 
+ *  -Update, settings work, but needs touching up.
  * -Add support for window resizing.
  */
 
@@ -36,6 +37,9 @@ namespace youtube_dl_gui
             downloadFolderComboBox.Items.Add(desktopPath.ToString().Replace("Desktop", "Downloads") + "\\");
             downloadFolderComboBox.Items.Add(Environment.GetFolderPath(Environment.SpecialFolder.MyMusic) + "\\");
             downloadFolderComboBox.Items.Add(Environment.GetFolderPath(Environment.SpecialFolder.MyVideos) + "\\");
+
+            downloadFolderComboBox.Items.Add(Properties.Settings.Default.downloadFolder);
+            downloadFolderComboBox.SelectedIndex = downloadFolderComboBox.Items.Count - 1;
 
             loadSettings();
         }
@@ -262,6 +266,8 @@ namespace youtube_dl_gui
 
         private void setSettings()
         {
+            Properties.Settings.Default.Save();
+
             if (!File.Exists(AppDomain.CurrentDomain.BaseDirectory + "settings.ini")) createSettings();
             
             FileStream stream = File.OpenWrite(AppDomain.CurrentDomain.BaseDirectory + "settings.ini");

@@ -82,5 +82,29 @@ namespace youtube_dl_gui.Properties {
                 this["writeAutoSubsChecked"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Audio")]
+        public string fileFormat {
+            get {
+                return ((string)(this["fileFormat"]));
+            }
+            set {
+                this["fileFormat"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string downloadFolder {
+            get {
+                return ((string)(this["downloadFolder"]));
+            }
+            set {
+                this["downloadFolder"] = value;
+            }
+        }
     }
 }
