@@ -5,8 +5,8 @@ namespace youtube_dl_gui
 {
     class CLIString
     {
-        static string START_OF_COMMAND = "youtube-dl --newline ";
-        static string PLACE_HOLDER = "***This*should*be*replaced~***";
+        private const string START_OF_COMMAND = "youtube-dl --newline ";
+        private const string PLACE_HOLDER = "***This*should*be*replaced~***";
 
         private string urlString;
         private bool hasUrl;
@@ -56,6 +56,7 @@ namespace youtube_dl_gui
                     command = null;
                     return false;
                 }
+
             command = new StringBuilder(START_OF_COMMAND + url.OriginalString + " ");
             hasPlaceholder = false;
             return true;
@@ -72,6 +73,7 @@ namespace youtube_dl_gui
             if (Uri.IsWellFormedUriString(urlString, UriKind.Absolute))
             {
                 url = new Uri(urlString);
+
                 if (url.Scheme == Uri.UriSchemeHttp || url.Scheme == Uri.UriSchemeHttps)
                 {
                     hasUrl = true;
@@ -125,7 +127,7 @@ namespace youtube_dl_gui
             else return false;
         }
 
-        public bool isAtleastABaseCommand()
+        public bool isAValidCommand()
         {   // This method checks if this is atleast a basic request
             // which means that it needs to have youtube-dl --newline URL
             return (hasUrl && !hasPlaceholder && command != null);

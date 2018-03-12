@@ -5,27 +5,37 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using System.IO;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+
+/*
+ * TODO:
+ * -Fix the download function.
+ * -Create a working update function.
+ * -Work on settings
+ */
 
 namespace youtube_dl_gui
 {
     public partial class mainWindow : Form
     {
-        static string K_ARG = "/K youtube-dl ";
-        static string C_ARG = "/C youtube-dl ";
-        static string START_OF_COMMAND = "youtube-dl ";
+        const string K_ARG = "/K youtube-dl ";
+        const string C_ARG = "/C youtube-dl ";
+        const string START_OF_COMMAND = "youtube-dl ";
         string currentVersion = "";
 
         public mainWindow()
         {
             InitializeComponent();
 
-            System.Threading.Tasks.Task updateVersionNumberAsyncTask = System.Threading.Tasks.Task.Factory.StartNew(() => updateVersionNumber());
-            if (fileFormatToNumber(fileFormatComboBox.SelectedText) >= fileFormatToNumber("Video")) keepBoth.Enabled = false;
+            Task updateVersionNumberAsyncTask = Task.Factory.StartNew(() => updateVersionNumber());
 
-            downloadFolderComboBox.Items.Add(Environment.GetFolderPath(Environment.SpecialFolder.Desktop));
-            downloadFolderComboBox.Items.Add(Environment.GetFolderPath(Environment.SpecialFolder.Desktop).ToString().Replace("Desktop", "Downloads"));
-            downloadFolderComboBox.Items.Add(Environment.GetFolderPath(Environment.SpecialFolder.MyMusic));
-            downloadFolderComboBox.Items.Add(Environment.GetFolderPath(Environment.SpecialFolder.MyVideos));
+            string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
+
+            downloadFolderComboBox.Items.Add(desktopPath + "\\");
+            downloadFolderComboBox.Items.Add(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\");
+            downloadFolderComboBox.Items.Add(desktopPath.ToString().Replace("Desktop", "Downloads") + "\\");
+            downloadFolderComboBox.Items.Add(Environment.GetFolderPath(Environment.SpecialFolder.MyMusic) + "\\");
+            downloadFolderComboBox.Items.Add(Environment.GetFolderPath(Environment.SpecialFolder.MyVideos) + "\\");
 
             loadSettings();
         }
@@ -33,6 +43,7 @@ namespace youtube_dl_gui
         // TODO: Fix this, so this works, even when making a window, and redirecting the output stream.
         private void dlButton_Click(object sender, EventArgs e)
         {
+            if (inputBox.Text.Trim().Equals("")) return;
             dlButton.Enabled = false;
             inputBox.ReadOnly = true;
 
@@ -43,7 +54,7 @@ namespace youtube_dl_gui
         
             command.addFileFormat(fileFormatComboBox.SelectedItem.ToString());
             if (keepBoth.Checked && keepBoth.Enabled) command.addKeepBoth();
-            command.addDownloadLocation(downloadFolderComboBox.SelectedItem.ToString());
+            command.addDownloadLocation(downloadFolderComboBox.Text);
 
             if (geoBypass.Checked) command.addGeoBypass();
             if (writeThumbnail.Checked) command.addThumbnail();
@@ -63,10 +74,11 @@ namespace youtube_dl_gui
                 inputBox.Lines = urls.ToArray();
                 if (!argument.addUrl(url))
                 {
-                    outputBox.AppendText("Failed to add URL to argument: addUrl failed" + Environment.NewLine);
+                    outputBox.AppendText("Failed to add URL to argument: addUrl failed" + Environment.NewLine + 
+                                        "The URL is: " + url + Environment.NewLine);
                     goto EXIT;
                 }
-                if (!argument.isAtleastABaseCommand())
+                if (!argument.isAValidCommand())
                 {
                     outputBox.AppendText("The argument for youtube-dl is incomplete: " + argument.ToString() + Environment.NewLine);
                     goto EXIT;
@@ -108,16 +120,15 @@ namespace youtube_dl_gui
 
         private void aboutMenuItem_Click(object sender, EventArgs e)
         {
-            if(currentVersion.Equals(""))
-            {
-                updateVersionNumber();
-                outputBox.AppendText("hsdakjhdsfkjhdfs");
-            }
+            if(currentVersion.Equals("")) updateVersionNumber();
+            // This would be weird, considering that it should have updated when the program was started.
+               
             About about = new About(currentVersion);
             about.Show();
         }
 
         // TODO: Fix this.
+        // The problem might the machine I'm testing this on.
         private void updateMenuItem_Click(object sender, EventArgs e)
         {  
             ProcessStartInfo startInfo = new ProcessStartInfo();
@@ -132,6 +143,7 @@ namespace youtube_dl_gui
 
             string output = "";
             process.Start();
+
             while (!process.StandardOutput.EndOfStream)
             {
                 string line = process.StandardOutput.ReadLine();
@@ -205,6 +217,7 @@ namespace youtube_dl_gui
             loadSettings();
         }
 
+        // TODO: Should rework settings.
         private void loadSettings()
         {
             if (!File.Exists(AppDomain.CurrentDomain.BaseDirectory + "settings.ini")) createSettings();
@@ -229,11 +242,17 @@ namespace youtube_dl_gui
                         if (format >= 0 && format <= 11) fileFormatComboBox.SelectedIndex = format;
                         else outputBox.AppendText("Didn't load file type from settings." + Environment.NewLine);
                     }
-                    if (line[0].ToLower().Contains("download folder"))
+                    if (line[0].ToLower().Trim().Contains("download folder"))
                     {
                         line[1] = line[1].Trim();
-                        downloadFolderComboBox.Items.Add(line[1]);
-                        downloadFolderComboBox.Text = line[1];
+                        if (!downloadFolderComboBox.Items.Contains(line[1]))
+                        {
+                            downloadFolderComboBox.Items.Add(line[1]);
+                            downloadFolderComboBox.SelectedIndex = downloadFolderComboBox.Items.IndexOf(line[1]);
+                        } else
+                        {
+                            downloadFolderComboBox.SelectedIndex = downloadFolderComboBox.Items.IndexOf(line[1]);
+                        }
                     }
                 }
             }
@@ -298,6 +317,17 @@ namespace youtube_dl_gui
         private void writeSubs_CheckedChanged(object sender, EventArgs e)
         {
             if (writeSubs.Checked && writeAutoSubs.Checked) writeAutoSubs.Checked = false;
+        }
+
+        private void openFolderButton_Click(object sender, EventArgs e)
+        {
+            folderBrowserDialog.ShowDialog();
+
+            string selectedPath = folderBrowserDialog.SelectedPath;
+            if(selectedPath[selectedPath.Length - 1] != '\\') selectedPath += "\\";
+
+            downloadFolderComboBox.Items.Add(selectedPath);
+            downloadFolderComboBox.SelectedItem = selectedPath;
         }
     }
 }

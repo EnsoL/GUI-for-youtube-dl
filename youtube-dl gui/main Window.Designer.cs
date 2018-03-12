@@ -51,6 +51,8 @@
             this.writeSubs = new System.Windows.Forms.CheckBox();
             this.writeAutoSubs = new System.Windows.Forms.CheckBox();
             this.keepBoth = new System.Windows.Forms.CheckBox();
+            this.folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
+            this.openFolderButton = new System.Windows.Forms.Button();
             this.menuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -158,14 +160,14 @@
             // aboutMenuItem
             // 
             this.aboutMenuItem.Name = "aboutMenuItem";
-            this.aboutMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.aboutMenuItem.Size = new System.Drawing.Size(112, 22);
             this.aboutMenuItem.Text = "&About";
             this.aboutMenuItem.Click += new System.EventHandler(this.aboutMenuItem_Click);
             // 
             // updateMenuItem
             // 
             this.updateMenuItem.Name = "updateMenuItem";
-            this.updateMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.updateMenuItem.Size = new System.Drawing.Size(112, 22);
             this.updateMenuItem.Text = "&Update";
             this.updateMenuItem.Click += new System.EventHandler(this.updateMenuItem_Click);
             // 
@@ -204,7 +206,7 @@
             // dlFolderLabel
             // 
             this.dlFolderLabel.AutoSize = true;
-            this.dlFolderLabel.Location = new System.Drawing.Point(12, 232);
+            this.dlFolderLabel.Location = new System.Drawing.Point(12, 224);
             this.dlFolderLabel.Name = "dlFolderLabel";
             this.dlFolderLabel.Size = new System.Drawing.Size(87, 13);
             this.dlFolderLabel.TabIndex = 9;
@@ -213,15 +215,15 @@
             // downloadFolderComboBox
             // 
             this.downloadFolderComboBox.FormattingEnabled = true;
-            this.downloadFolderComboBox.Location = new System.Drawing.Point(15, 248);
+            this.downloadFolderComboBox.Location = new System.Drawing.Point(15, 240);
             this.downloadFolderComboBox.Name = "downloadFolderComboBox";
-            this.downloadFolderComboBox.Size = new System.Drawing.Size(220, 21);
+            this.downloadFolderComboBox.Size = new System.Drawing.Size(238, 21);
             this.downloadFolderComboBox.TabIndex = 10;
             // 
             // geoBypass
             // 
             this.geoBypass.AutoSize = true;
-            this.geoBypass.Location = new System.Drawing.Point(273, 196);
+            this.geoBypass.Location = new System.Drawing.Point(297, 196);
             this.geoBypass.Name = "geoBypass";
             this.geoBypass.Size = new System.Drawing.Size(174, 17);
             this.geoBypass.TabIndex = 11;
@@ -231,7 +233,7 @@
             // writeThumbnail
             // 
             this.writeThumbnail.AutoSize = true;
-            this.writeThumbnail.Location = new System.Drawing.Point(273, 220);
+            this.writeThumbnail.Location = new System.Drawing.Point(297, 220);
             this.writeThumbnail.Name = "writeThumbnail";
             this.writeThumbnail.Size = new System.Drawing.Size(147, 17);
             this.writeThumbnail.TabIndex = 12;
@@ -241,40 +243,55 @@
             // writeSubs
             // 
             this.writeSubs.AutoSize = true;
-            this.writeSubs.Location = new System.Drawing.Point(273, 244);
+            this.writeSubs.Location = new System.Drawing.Point(297, 244);
             this.writeSubs.Name = "writeSubs";
-            this.writeSubs.Size = new System.Drawing.Size(124, 17);
+            this.writeSubs.Size = new System.Drawing.Size(140, 17);
             this.writeSubs.TabIndex = 13;
-            this.writeSubs.Text = "Attempt to write subs";
+            this.writeSubs.Text = "Attempt to write subtitles";
             this.writeSubs.UseVisualStyleBackColor = true;
             this.writeSubs.CheckedChanged += new System.EventHandler(this.writeSubs_CheckedChanged);
             // 
             // writeAutoSubs
             // 
             this.writeAutoSubs.AutoSize = true;
-            this.writeAutoSubs.Location = new System.Drawing.Point(273, 268);
+            this.writeAutoSubs.Location = new System.Drawing.Point(297, 268);
             this.writeAutoSubs.Name = "writeAutoSubs";
-            this.writeAutoSubs.Size = new System.Drawing.Size(223, 17);
+            this.writeAutoSubs.Size = new System.Drawing.Size(241, 17);
             this.writeAutoSubs.TabIndex = 14;
-            this.writeAutoSubs.Text = "Attempt to write auto subs (YouTube only)";
+            this.writeAutoSubs.Text = "Attempt to write auto subtitless(YouTube only)";
             this.writeAutoSubs.UseVisualStyleBackColor = true;
             this.writeAutoSubs.CheckedChanged += new System.EventHandler(this.writeAutoSubs_CheckedChanged);
             // 
             // keepBoth
             // 
             this.keepBoth.AutoSize = true;
-            this.keepBoth.Location = new System.Drawing.Point(155, 200);
+            this.keepBoth.Location = new System.Drawing.Point(147, 200);
             this.keepBoth.Name = "keepBoth";
-            this.keepBoth.Size = new System.Drawing.Size(80, 17);
+            this.keepBoth.Size = new System.Drawing.Size(130, 17);
             this.keepBoth.TabIndex = 15;
-            this.keepBoth.Text = "Keep video";
+            this.keepBoth.Text = "Save audio and video";
             this.keepBoth.UseVisualStyleBackColor = true;
+            // 
+            // folderBrowserDialog
+            // 
+            this.folderBrowserDialog.RootFolder = System.Environment.SpecialFolder.MyComputer;
+            // 
+            // openFolderButton
+            // 
+            this.openFolderButton.Location = new System.Drawing.Point(259, 239);
+            this.openFolderButton.Name = "openFolderButton";
+            this.openFolderButton.Size = new System.Drawing.Size(18, 21);
+            this.openFolderButton.TabIndex = 16;
+            this.openFolderButton.Text = "*";
+            this.openFolderButton.UseVisualStyleBackColor = true;
+            this.openFolderButton.Click += new System.EventHandler(this.openFolderButton_Click);
             // 
             // mainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(644, 462);
+            this.Controls.Add(this.openFolderButton);
             this.Controls.Add(this.keepBoth);
             this.Controls.Add(this.writeAutoSubs);
             this.Controls.Add(this.writeSubs);
@@ -326,6 +343,8 @@
         private System.Windows.Forms.CheckBox writeSubs;
         private System.Windows.Forms.CheckBox writeAutoSubs;
         private System.Windows.Forms.CheckBox keepBoth;
+        private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog;
+        private System.Windows.Forms.Button openFolderButton;
     }
 }
 
