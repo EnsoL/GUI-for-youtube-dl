@@ -10,8 +10,6 @@ using System.Threading.Tasks;
  * TODO:
  * -Fix the download function.
  * -Create a working update function.
- * -Create proper settings. 
- *  -Update, settings work, but needs touching up.
  * -Add support for window resizing.
  */
 
@@ -31,6 +29,7 @@ namespace youtube_dl_gui
             Task updateVersionNumberAsyncTask = Task.Factory.StartNew(() => updateVersionNumber());
 
             string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
+            string downloadFolderSetting = Properties.Settings.Default.downloadFolder;
 
             downloadFolderComboBox.Items.Add(desktopPath + "\\");
             downloadFolderComboBox.Items.Add(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\");
@@ -38,9 +37,16 @@ namespace youtube_dl_gui
             downloadFolderComboBox.Items.Add(Environment.GetFolderPath(Environment.SpecialFolder.MyMusic) + "\\");
             downloadFolderComboBox.Items.Add(Environment.GetFolderPath(Environment.SpecialFolder.MyVideos) + "\\");
 
-            downloadFolderComboBox.Items.Add(Properties.Settings.Default.downloadFolder);
-            downloadFolderComboBox.SelectedIndex = downloadFolderComboBox.Items.Count - 1;
-
+            if (downloadFolderComboBox.Items.Contains(downloadFolderSetting))
+            {
+                downloadFolderComboBox.SelectedItem = downloadFolderSetting;
+            }
+            else
+            {
+                downloadFolderComboBox.Items.Add(downloadFolderSetting);
+                downloadFolderComboBox.SelectedItem = downloadFolderSetting;
+            }
+                        
             loadSettings();
         }
 
@@ -221,71 +227,20 @@ namespace youtube_dl_gui
             loadSettings();
         }
 
-        // TODO: Should rework settings.
         private void loadSettings()
         {
-            if (!File.Exists(AppDomain.CurrentDomain.BaseDirectory + "settings.ini")) createSettings();
-
-            StreamReader reader = new StreamReader(File.OpenRead(AppDomain.CurrentDomain.BaseDirectory + "settings.ini"));
-            string[] line = new string[1];
-
-            while ((line[0] = reader.ReadLine()) != null)
-            {
-                line = line[0].Split('=');
-
-                if (line.Length == 2)
-                {
-                    if (line[0].ToLower().Contains("file format"))
-                    {
-                        int format;
-                        line[1] = line[1].Trim().ToLower();
-
-                        if (Regex.IsMatch(line[1], @"^[0-9]$")) format = int.Parse(line[1]);
-                        else format = fileFormatToNumber(line[1]);
-
-                        if (format >= 0 && format <= 11) fileFormatComboBox.SelectedIndex = format;
-                        else outputBox.AppendText("Didn't load file type from settings." + Environment.NewLine);
-                    }
-                    if (line[0].ToLower().Trim().Contains("download folder"))
-                    {
-                        line[1] = line[1].Trim();
-                        if (!downloadFolderComboBox.Items.Contains(line[1]))
-                        {
-                            downloadFolderComboBox.Items.Add(line[1]);
-                            downloadFolderComboBox.SelectedIndex = downloadFolderComboBox.Items.IndexOf(line[1]);
-                        } else
-                        {
-                            downloadFolderComboBox.SelectedIndex = downloadFolderComboBox.Items.IndexOf(line[1]);
-                        }
-                    }
-                }
-            }
-                
-            reader.Close();
+            Properties.Settings.Default.Reload();
         }
 
         private void setSettings()
         {
             Properties.Settings.Default.Save();
-
-            if (!File.Exists(AppDomain.CurrentDomain.BaseDirectory + "settings.ini")) createSettings();
-            
-            FileStream stream = File.OpenWrite(AppDomain.CurrentDomain.BaseDirectory + "settings.ini");
-            Byte[] info = new System.Text.UTF8Encoding(true).GetBytes("File Format = " + fileFormatComboBox.SelectedIndex + Environment.NewLine
-                                                        + "Download Folder = " + downloadFolderComboBox.SelectedText.Trim() + Environment.NewLine);
-            stream.WriteAsync(info, 0, info.Length);
-            stream.Close();
         }
 
         private void createSettings()
         {
-            using (FileStream fs = File.Create(AppDomain.CurrentDomain.BaseDirectory + "settings.ini"))
-            {
-                string downloadPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-                Byte[] info = new System.Text.UTF8Encoding(true).GetBytes("File Format = " + fileFormatToNumber("Video") + Environment.NewLine + "Download Folder = " + downloadPath);
-                fs.Write(info, 0, info.Length);
-                fs.Close();
-            }
+            Properties.Settings.Default.Reset();
+            setSettings();
         }
 
         private int fileFormatToNumber(string format)
@@ -327,9 +282,13 @@ namespace youtube_dl_gui
 
         private void openFolderButton_Click(object sender, EventArgs e)
         {
-            folderBrowserDialog.ShowDialog();
+            string selectedPath;
 
-            string selectedPath = folderBrowserDialog.SelectedPath;
+            folderBrowserDialog.ShowDialog();
+            selectedPath = folderBrowserDialog.SelectedPath;
+
+            // duzina barem iznad 0, jer kad se upali program, i odma se izabere openFolder, pa izabere cancel, bez biranja, vraca prazan string
+            if(selectedPath == null || selectedPath.Length < 3) return;
             if(selectedPath[selectedPath.Length - 1] != '\\') selectedPath += "\\";
 
             downloadFolderComboBox.Items.Add(selectedPath);
