@@ -69,7 +69,7 @@
             // inputLabel
             // 
             this.inputLabel.AutoSize = true;
-            this.inputLabel.Location = new System.Drawing.Point(11, 30);
+            this.inputLabel.Location = new System.Drawing.Point(12, 30);
             this.inputLabel.Name = "inputLabel";
             this.inputLabel.Size = new System.Drawing.Size(42, 13);
             this.inputLabel.TabIndex = 1;
