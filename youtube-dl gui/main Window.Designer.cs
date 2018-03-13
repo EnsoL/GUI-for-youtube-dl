@@ -42,22 +42,18 @@
             this.helpMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.updateMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.fileFormatLabel = new System.Windows.Forms.Label();
+            this.dlFolderLabel = new System.Windows.Forms.Label();
+            this.downloadFolderComboBox = new System.Windows.Forms.ComboBox();
             this.folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
+            this.openFolderButton = new System.Windows.Forms.Button();
+            this.keepBoth = new System.Windows.Forms.CheckBox();
             this.writeAutoSubs = new System.Windows.Forms.CheckBox();
             this.writeSubs = new System.Windows.Forms.CheckBox();
             this.writeThumbnail = new System.Windows.Forms.CheckBox();
             this.geoBypass = new System.Windows.Forms.CheckBox();
-            this.checkboxPanel = new System.Windows.Forms.GroupBox();
-            this.downloadFolderComboBox = new System.Windows.Forms.ComboBox();
-            this.keepBoth = new System.Windows.Forms.CheckBox();
-            this.dlFolderLabel = new System.Windows.Forms.Label();
-            this.openFolderButton = new System.Windows.Forms.Button();
             this.fileFormatComboBox = new System.Windows.Forms.ComboBox();
-            this.fileFormatLabel = new System.Windows.Forms.Label();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.menuStrip.SuspendLayout();
-            this.checkboxPanel.SuspendLayout();
-            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // dlButton
@@ -175,17 +171,66 @@
             this.updateMenuItem.Text = "&Update";
             this.updateMenuItem.Click += new System.EventHandler(this.updateMenuItem_Click);
             // 
+            // fileFormatLabel
+            // 
+            this.fileFormatLabel.AutoSize = true;
+            this.fileFormatLabel.Location = new System.Drawing.Point(12, 180);
+            this.fileFormatLabel.Name = "fileFormatLabel";
+            this.fileFormatLabel.Size = new System.Drawing.Size(58, 13);
+            this.fileFormatLabel.TabIndex = 8;
+            this.fileFormatLabel.Text = "File format:";
+            // 
+            // dlFolderLabel
+            // 
+            this.dlFolderLabel.AutoSize = true;
+            this.dlFolderLabel.Location = new System.Drawing.Point(12, 224);
+            this.dlFolderLabel.Name = "dlFolderLabel";
+            this.dlFolderLabel.Size = new System.Drawing.Size(87, 13);
+            this.dlFolderLabel.TabIndex = 9;
+            this.dlFolderLabel.Text = "Download folder:";
+            // 
+            // downloadFolderComboBox
+            // 
+            this.downloadFolderComboBox.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::youtube_dl_gui.Properties.Settings.Default, "downloadFolder", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.downloadFolderComboBox.FormattingEnabled = true;
+            this.downloadFolderComboBox.Location = new System.Drawing.Point(15, 240);
+            this.downloadFolderComboBox.Name = "downloadFolderComboBox";
+            this.downloadFolderComboBox.Size = new System.Drawing.Size(238, 21);
+            this.downloadFolderComboBox.TabIndex = 10;
+            this.downloadFolderComboBox.Text = global::youtube_dl_gui.Properties.Settings.Default.downloadFolder;
+            // 
             // folderBrowserDialog
             // 
             this.folderBrowserDialog.RootFolder = System.Environment.SpecialFolder.MyComputer;
             // 
+            // openFolderButton
+            // 
+            this.openFolderButton.Location = new System.Drawing.Point(259, 239);
+            this.openFolderButton.Name = "openFolderButton";
+            this.openFolderButton.Size = new System.Drawing.Size(18, 21);
+            this.openFolderButton.TabIndex = 16;
+            this.openFolderButton.Text = "*";
+            this.openFolderButton.UseVisualStyleBackColor = true;
+            this.openFolderButton.Click += new System.EventHandler(this.openFolderButton_Click);
+            // 
+            // keepBoth
+            // 
+            this.keepBoth.AutoSize = true;
+            this.keepBoth.Checked = global::youtube_dl_gui.Properties.Settings.Default.keepBothChecked;
+            this.keepBoth.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::youtube_dl_gui.Properties.Settings.Default, "keepBothChecked", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.keepBoth.Location = new System.Drawing.Point(147, 200);
+            this.keepBoth.Name = "keepBoth";
+            this.keepBoth.Size = new System.Drawing.Size(130, 17);
+            this.keepBoth.TabIndex = 15;
+            this.keepBoth.Text = "Save audio and video";
+            this.keepBoth.UseVisualStyleBackColor = true;
+            // 
             // writeAutoSubs
             // 
-            this.writeAutoSubs.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.writeAutoSubs.AutoSize = true;
             this.writeAutoSubs.Checked = global::youtube_dl_gui.Properties.Settings.Default.writeAutoSubsChecked;
             this.writeAutoSubs.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::youtube_dl_gui.Properties.Settings.Default, "writeAutoSubsChecked", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.writeAutoSubs.Location = new System.Drawing.Point(6, -70);
+            this.writeAutoSubs.Location = new System.Drawing.Point(297, 268);
             this.writeAutoSubs.Name = "writeAutoSubs";
             this.writeAutoSubs.Size = new System.Drawing.Size(241, 17);
             this.writeAutoSubs.TabIndex = 14;
@@ -195,11 +240,10 @@
             // 
             // writeSubs
             // 
-            this.writeSubs.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.writeSubs.AutoSize = true;
             this.writeSubs.Checked = global::youtube_dl_gui.Properties.Settings.Default.writeSubsChecked;
             this.writeSubs.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::youtube_dl_gui.Properties.Settings.Default, "writeSubsChecked", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.writeSubs.Location = new System.Drawing.Point(6, -93);
+            this.writeSubs.Location = new System.Drawing.Point(297, 244);
             this.writeSubs.Name = "writeSubs";
             this.writeSubs.Size = new System.Drawing.Size(140, 17);
             this.writeSubs.TabIndex = 13;
@@ -209,11 +253,10 @@
             // 
             // writeThumbnail
             // 
-            this.writeThumbnail.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.writeThumbnail.AutoSize = true;
             this.writeThumbnail.Checked = global::youtube_dl_gui.Properties.Settings.Default.writeThumbnailChecked;
             this.writeThumbnail.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::youtube_dl_gui.Properties.Settings.Default, "writeThumbnailChecked", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.writeThumbnail.Location = new System.Drawing.Point(6, -116);
+            this.writeThumbnail.Location = new System.Drawing.Point(297, 220);
             this.writeThumbnail.Name = "writeThumbnail";
             this.writeThumbnail.Size = new System.Drawing.Size(147, 17);
             this.writeThumbnail.TabIndex = 12;
@@ -222,79 +265,18 @@
             // 
             // geoBypass
             // 
-            this.geoBypass.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.geoBypass.AutoSize = true;
             this.geoBypass.Checked = global::youtube_dl_gui.Properties.Settings.Default.geoBypassChecked;
             this.geoBypass.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::youtube_dl_gui.Properties.Settings.Default, "geoBypassChecked", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.geoBypass.Location = new System.Drawing.Point(6, -139);
+            this.geoBypass.Location = new System.Drawing.Point(297, 196);
             this.geoBypass.Name = "geoBypass";
             this.geoBypass.Size = new System.Drawing.Size(174, 17);
             this.geoBypass.TabIndex = 11;
             this.geoBypass.Text = "Attempt to bypass geo blocking";
             this.geoBypass.UseVisualStyleBackColor = true;
             // 
-            // checkboxPanel
-            // 
-            this.checkboxPanel.Controls.Add(this.geoBypass);
-            this.checkboxPanel.Controls.Add(this.writeThumbnail);
-            this.checkboxPanel.Controls.Add(this.writeSubs);
-            this.checkboxPanel.Controls.Add(this.writeAutoSubs);
-            this.checkboxPanel.Location = new System.Drawing.Point(299, 180);
-            this.checkboxPanel.Name = "checkboxPanel";
-            this.checkboxPanel.Size = new System.Drawing.Size(273, 112);
-            this.checkboxPanel.TabIndex = 17;
-            this.checkboxPanel.TabStop = false;
-            this.checkboxPanel.Text = "Aditional Settings";
-            // 
-            // downloadFolderComboBox
-            // 
-            this.downloadFolderComboBox.AllowDrop = true;
-            this.downloadFolderComboBox.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.downloadFolderComboBox.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::youtube_dl_gui.Properties.Settings.Default, "downloadFolder", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.downloadFolderComboBox.FormattingEnabled = true;
-            this.downloadFolderComboBox.Location = new System.Drawing.Point(9, -83);
-            this.downloadFolderComboBox.Name = "downloadFolderComboBox";
-            this.downloadFolderComboBox.Size = new System.Drawing.Size(238, 21);
-            this.downloadFolderComboBox.TabIndex = 10;
-            this.downloadFolderComboBox.Text = global::youtube_dl_gui.Properties.Settings.Default.downloadFolder;
-            // 
-            // keepBoth
-            // 
-            this.keepBoth.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.keepBoth.AutoSize = true;
-            this.keepBoth.Checked = global::youtube_dl_gui.Properties.Settings.Default.keepBothChecked;
-            this.keepBoth.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::youtube_dl_gui.Properties.Settings.Default, "keepBothChecked", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.keepBoth.Location = new System.Drawing.Point(141, -123);
-            this.keepBoth.Name = "keepBoth";
-            this.keepBoth.Size = new System.Drawing.Size(130, 17);
-            this.keepBoth.TabIndex = 15;
-            this.keepBoth.Text = "Save audio and video";
-            this.keepBoth.UseVisualStyleBackColor = true;
-            // 
-            // dlFolderLabel
-            // 
-            this.dlFolderLabel.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.dlFolderLabel.AutoSize = true;
-            this.dlFolderLabel.Location = new System.Drawing.Point(6, -99);
-            this.dlFolderLabel.Name = "dlFolderLabel";
-            this.dlFolderLabel.Size = new System.Drawing.Size(87, 13);
-            this.dlFolderLabel.TabIndex = 9;
-            this.dlFolderLabel.Text = "Download folder:";
-            // 
-            // openFolderButton
-            // 
-            this.openFolderButton.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.openFolderButton.Location = new System.Drawing.Point(253, -84);
-            this.openFolderButton.Name = "openFolderButton";
-            this.openFolderButton.Size = new System.Drawing.Size(18, 21);
-            this.openFolderButton.TabIndex = 16;
-            this.openFolderButton.Text = "*";
-            this.openFolderButton.UseVisualStyleBackColor = true;
-            this.openFolderButton.Click += new System.EventHandler(this.openFolderButton_Click);
-            // 
             // fileFormatComboBox
             // 
-            this.fileFormatComboBox.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.fileFormatComboBox.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::youtube_dl_gui.Properties.Settings.Default, "fileFormat", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.fileFormatComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.fileFormatComboBox.FormattingEnabled = true;
@@ -311,44 +293,28 @@
             "  mp4",
             "  webm",
             "  3gp"});
-            this.fileFormatComboBox.Location = new System.Drawing.Point(9, -127);
+            this.fileFormatComboBox.Location = new System.Drawing.Point(15, 196);
             this.fileFormatComboBox.Name = "fileFormatComboBox";
             this.fileFormatComboBox.Size = new System.Drawing.Size(122, 21);
             this.fileFormatComboBox.TabIndex = 7;
+            this.fileFormatComboBox.Text = global::youtube_dl_gui.Properties.Settings.Default.fileFormat;
             this.fileFormatComboBox.SelectedIndexChanged += new System.EventHandler(this.fileFormatComboBox_SelectedIndexChanged);
-            // 
-            // fileFormatLabel
-            // 
-            this.fileFormatLabel.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.fileFormatLabel.AutoSize = true;
-            this.fileFormatLabel.Location = new System.Drawing.Point(6, -143);
-            this.fileFormatLabel.Name = "fileFormatLabel";
-            this.fileFormatLabel.Size = new System.Drawing.Size(58, 13);
-            this.fileFormatLabel.TabIndex = 8;
-            this.fileFormatLabel.Text = "File format:";
-            // 
-            // groupBox1
-            // 
-            this.groupBox1.Controls.Add(this.fileFormatLabel);
-            this.groupBox1.Controls.Add(this.fileFormatComboBox);
-            this.groupBox1.Controls.Add(this.openFolderButton);
-            this.groupBox1.Controls.Add(this.dlFolderLabel);
-            this.groupBox1.Controls.Add(this.keepBoth);
-            this.groupBox1.Controls.Add(this.downloadFolderComboBox);
-            this.groupBox1.Location = new System.Drawing.Point(14, 180);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(279, 110);
-            this.groupBox1.TabIndex = 18;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "groupBox1";
             // 
             // mainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(644, 462);
-            this.Controls.Add(this.groupBox1);
-            this.Controls.Add(this.checkboxPanel);
+            this.Controls.Add(this.openFolderButton);
+            this.Controls.Add(this.keepBoth);
+            this.Controls.Add(this.writeAutoSubs);
+            this.Controls.Add(this.writeSubs);
+            this.Controls.Add(this.writeThumbnail);
+            this.Controls.Add(this.geoBypass);
+            this.Controls.Add(this.downloadFolderComboBox);
+            this.Controls.Add(this.dlFolderLabel);
+            this.Controls.Add(this.fileFormatLabel);
+            this.Controls.Add(this.fileFormatComboBox);
             this.Controls.Add(this.outputBox);
             this.Controls.Add(this.outputLabel);
             this.Controls.Add(this.inputBox);
@@ -362,10 +328,6 @@
             this.Text = "YouTube DL GUI";
             this.menuStrip.ResumeLayout(false);
             this.menuStrip.PerformLayout();
-            this.checkboxPanel.ResumeLayout(false);
-            this.checkboxPanel.PerformLayout();
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -382,6 +344,9 @@
         private System.Windows.Forms.ToolStripMenuItem helpMenuItem;
         private System.Windows.Forms.ToolStripMenuItem updateMenuItem;
         private System.Windows.Forms.ToolStripMenuItem aboutMenuItem;
+        private System.Windows.Forms.Label fileFormatLabel;
+        private System.Windows.Forms.Label dlFolderLabel;
+        private System.Windows.Forms.ComboBox downloadFolderComboBox;
         private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem loadSettingsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem saveSettingsToolStripMenuItem;
@@ -390,15 +355,10 @@
         private System.Windows.Forms.CheckBox writeThumbnail;
         private System.Windows.Forms.CheckBox writeSubs;
         private System.Windows.Forms.CheckBox writeAutoSubs;
-        private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog;
-        private System.Windows.Forms.GroupBox checkboxPanel;
-        private System.Windows.Forms.ComboBox downloadFolderComboBox;
         private System.Windows.Forms.CheckBox keepBoth;
-        private System.Windows.Forms.Label dlFolderLabel;
+        private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog;
         private System.Windows.Forms.Button openFolderButton;
         private System.Windows.Forms.ComboBox fileFormatComboBox;
-        private System.Windows.Forms.Label fileFormatLabel;
-        private System.Windows.Forms.GroupBox groupBox1;
     }
 }
 
