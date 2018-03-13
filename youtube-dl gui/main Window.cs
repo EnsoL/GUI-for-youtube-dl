@@ -2,8 +2,6 @@
 using System.Diagnostics;
 using System.Collections.Generic;
 using System.Windows.Forms;
-using System.IO;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 /*
@@ -58,17 +56,17 @@ namespace youtube_dl_gui
 
             List<string> urls = new List<string>(inputBox.Lines);
 
-            CLIString command = new CLIString();
-            command.createPlaceholderStartOfCommand();
+            CLIString template = new CLIString();
+            template.createPlaceholderStartOfCommand();
         
-            command.addFileFormat(fileFormatComboBox.SelectedItem.ToString());
-            if (keepBoth.Checked && keepBoth.Enabled) command.addKeepBoth();
-            command.addDownloadLocation(downloadFolderComboBox.Text);
+            template.addFileFormat(fileFormatComboBox.SelectedItem.ToString());
+            if (keepBoth.Checked && keepBoth.Enabled) template.addKeepBoth();
+            template.addDownloadLocation(downloadFolderComboBox.Text);
 
-            if (geoBypass.Checked) command.addGeoBypass();
-            if (writeThumbnail.Checked) command.addThumbnail();
-            if (writeSubs.Checked) command.addWriteSubs();
-            if (writeAutoSubs.Checked) command.addWriteAutoSubs();
+            if (geoBypass.Checked) template.addGeoBypass();
+            if (writeThumbnail.Checked) template.addThumbnail();
+            if (writeSubs.Checked) template.addWriteSubs();
+            if (writeAutoSubs.Checked) template.addWriteAutoSubs();
 
             ProcessStartInfo startInfo = new ProcessStartInfo();
             startInfo.FileName = "cmd.exe";
@@ -78,25 +76,26 @@ namespace youtube_dl_gui
 
             while (urls.Count > 0)
             {
-                CLIString argument = new CLIString(command);
+                CLIString command = new CLIString(template);
                 string url = urls[0].Trim();
                 inputBox.Lines = urls.ToArray();
-                if (!argument.addUrl(url))
+
+                if (!command.addUrl(url))
                 {
-                    outputBox.AppendText("Failed to add URL to argument: addUrl failed" + Environment.NewLine + 
+                    outputBox.AppendText("Failed to add URL to youtube-dl command." + Environment.NewLine + 
                                         "The URL is: " + url + Environment.NewLine);
-                    goto EXIT;
+                    break;
                 }
-                if (!argument.isAValidCommand())
+                if (!command.isAValidCommand())
                 {
-                    outputBox.AppendText("The argument for youtube-dl is incomplete: " + argument.ToString() + Environment.NewLine);
-                    goto EXIT;
+                    outputBox.AppendText("The command for youtube-dl is incomplete: " + command.ToString() + Environment.NewLine);
+                    break;
                 }
 
                 outputBox.Text += "\r\n---------------------------------------------------------------------------------------------------------------------\r\n" + 
-                    argument.ToString() + "\r\n---------------------------------------------------------------------------------------------------------------------\r\n";
+                    command.ToString() + "\r\n---------------------------------------------------------------------------------------------------------------------\r\n";
 
-                startInfo.Arguments = "/K" + argument.ToString();
+                startInfo.Arguments = "/K" + command.ToString();
                 Process process = new Process();
                 process.StartInfo = startInfo;
 
@@ -141,7 +140,7 @@ namespace youtube_dl_gui
         {  
             ProcessStartInfo startInfo = new ProcessStartInfo();
             startInfo.FileName = "cmd.exe";
-            startInfo.Arguments = K_ARG + "--update";
+            startInfo.Arguments = C_ARG + "--update";
             startInfo.UseShellExecute = false;
             startInfo.RedirectStandardOutput = true;
             startInfo.CreateNoWindow = true;
@@ -222,7 +221,7 @@ namespace youtube_dl_gui
 
         private void setToDefaultToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            createSettings();
+            resetSettings();
             loadSettings();
         }
 
@@ -236,7 +235,7 @@ namespace youtube_dl_gui
             Properties.Settings.Default.Save();
         }
 
-        private void createSettings()
+        private void resetSettings()
         {
             Properties.Settings.Default.Reset();
             setSettings();
