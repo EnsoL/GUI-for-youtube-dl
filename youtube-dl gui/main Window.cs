@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 /*
  * TODO:
  * -Fix the download function.
- * -Create a working update function.
  * -Add support for window resizing.
  */
 
@@ -137,36 +136,35 @@ namespace youtube_dl_gui
             about.Show();
         }
 
-        // TODO: Fix this.
-        // The problem might the machine I'm testing this on.
+        // Probably works.
         private void updateMenuItem_Click(object sender, EventArgs e)
         {  
             ProcessStartInfo startInfo = new ProcessStartInfo();
             startInfo.FileName = "cmd.exe";
-            startInfo.Arguments = C_ARG + "--update";
+            startInfo.Arguments = K_ARG + "--update";
             startInfo.UseShellExecute = false;
             startInfo.RedirectStandardOutput = true;
             startInfo.CreateNoWindow = true;
 
             Process process = new Process();
             process.StartInfo = startInfo;
-
+            
             string output = "";
             process.Start();
-
+            
             while (!process.StandardOutput.EndOfStream)
             {
                 string line = process.StandardOutput.ReadLine();
-                output = line;
+                output += line + Environment.NewLine;
             }
             
             process.Close();
-
-            if(output.Contains("It looks like you installed"))
+            
+            if(output.Contains("you installed with a"))
             {
                 startInfo = new ProcessStartInfo();
                 startInfo.FileName = "cmd.exe";
-                startInfo.Arguments = "pip install --upgrade youtube-dl";
+                startInfo.Arguments = "/K pip install --upgrade youtube-dl";
                 startInfo.UseShellExecute = false;
                 startInfo.RedirectStandardOutput = true;
                 startInfo.CreateNoWindow = true;
@@ -185,7 +183,8 @@ namespace youtube_dl_gui
                 if (output.Contains("is not recognized")) output = "Please manully update youtube-dl";
             }
 
-            outputBox.Text += output + Environment.NewLine;
+            // Use only for debugging.
+            // outputBox.Text += output + Environment.NewLine;
 
             updateVersionNumber();
         }
