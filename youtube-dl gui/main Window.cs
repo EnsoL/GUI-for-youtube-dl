@@ -190,6 +190,8 @@ namespace youtube_dl_gui
             // outputBox.Text += output + Environment.NewLine;
 
             updateVersionNumber();
+
+            outputBox.Text += "The current version of youtube-dl is: " + currentVersion + Environment.NewLine;
         }
 
         private void updateVersionNumber()
