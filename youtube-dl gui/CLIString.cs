@@ -129,7 +129,7 @@ namespace youtube_dl_gui
 
         public bool isAValidCommand()
         {   // This method checks if this is atleast a basic request
-            // which means that it needs to have youtube-dl --newline URL
+            // which means that it needs to have youtube-dl URL
             return (hasUrl && !hasPlaceholder && command != null);
         }
 

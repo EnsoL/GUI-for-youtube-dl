@@ -4,10 +4,9 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using System.Threading.Tasks;
 
-/*
- * TODO:
- * -Fix the download function.
- * -Add support for window resizing.
+/* Links for testing.
+ * https://www.youtube.com/watch?v=16W7c0mb-rE
+ * https://www.youtube.com/watch?v=pYXVdgvjQAE
  */
 
 namespace youtube_dl_gui
@@ -47,7 +46,6 @@ namespace youtube_dl_gui
             loadSettings();
         }
 
-        // TODO: Fix this, so this works, even when making a window, and redirecting the output stream.
         private void dlButton_Click(object sender, EventArgs e)
         {
             if (inputBox.Text.Trim().Equals("")) return;
@@ -71,14 +69,13 @@ namespace youtube_dl_gui
             ProcessStartInfo startInfo = new ProcessStartInfo();
             startInfo.FileName = "cmd.exe";
             startInfo.UseShellExecute = false;
-            //startInfo.RedirectStandardOutput = true;
-            //startInfo.CreateNoWindow = true;
+            startInfo.RedirectStandardOutput = true;
+            startInfo.CreateNoWindow = true;
 
             while (urls.Count > 0)
             {
                 CLIString command = new CLIString(template);
                 string url = urls[0].Trim();
-                inputBox.Lines = urls.ToArray();
 
                 if (!command.addUrl(url))
                 {
@@ -91,37 +88,46 @@ namespace youtube_dl_gui
                     outputBox.AppendText("The command for youtube-dl is incomplete: " + command.ToString() + Environment.NewLine);
                     break;
                 }
-
+                /* for debugging
                 outputBox.Text += "\r\n---------------------------------------------------------------------------------------------------------------------\r\n" + 
                     command.ToString() + "\r\n---------------------------------------------------------------------------------------------------------------------\r\n";
-
+                    */
                 startInfo.Arguments = "/K" + command.ToString();
                 Process process = new Process();
                 process.StartInfo = startInfo;
 
                 process.Start();
-                /* Godamm, it doesn't work when I redirect the output stream and make no window.
-                 * I think it's due to the process being closed early.
+
+                string outputLine = "";
+
                 while (!process.StandardOutput.EndOfStream && !process.HasExited)
                 {
-                    string outputLine = process.StandardOutput.ReadLine();
-                    //if (outputLine.Contains("]")) outputLine = outputLine.Split(']')[1];
+                    outputLine = process.StandardOutput.ReadLine();
+
                     outputLine = outputLine + Environment.NewLine;
 
-                    //if (!outputLine.Contains("Microsoft") && !outputLine.Trim().Equals("") &&
-                    //  !(outputLine.Contains(">") || outputLine.Contains(":\\"))) outputBox.Text += outputLine;
+                    if(!outputLine.Contains(">")) outputBox.Text += outputLine;
 
-                    // Scrolls the textBox to the bottom.
                     outputBox.SelectionStart = outputBox.Text.Length;
-                    outputBox.ScrollToCaret();  // https://www.youtube.com/watch?v=qgnd5JvpAFc https://www.youtube.com/watch?v=fc1tg9qkGyI
+                    outputBox.ScrollToCaret();  // https://www.youtube.com/watch?v=fc1tg9qkGyI
                 }
-                */
-                // This is last, so that only after something is downloaded, it's removed from the list.
+
+                if (outputLine.Contains("downloading webpage") || outputLine.Contains("[download]"))
+                {
+                    outputBox.Text += "An error might have occured, are you connected to the internet?" + Environment.NewLine;
+                }
+                else
+                {
+                    outputBox.Text += url + " - Done" + Environment.NewLine;
+                    outputBox.SelectionStart = outputBox.Text.Length;
+                    outputBox.ScrollToCaret();
+                }
+
                 urls.Remove(urls[0]);
                 inputBox.Lines = urls.ToArray();
                 process.Close();
             }
-        EXIT:
+
             inputBox.ReadOnly = false;
             dlButton.Enabled = true;
         }
@@ -129,13 +135,11 @@ namespace youtube_dl_gui
         private void aboutMenuItem_Click(object sender, EventArgs e)
         {
             if(currentVersion.Equals("")) updateVersionNumber();
-            // This would be weird, considering that it should have updated when the program was started.
                
             About about = new About(currentVersion);
             about.Show();
         }
 
-        // Probably works.
         private void updateMenuItem_Click(object sender, EventArgs e)
         {  
             ProcessStartInfo startInfo = new ProcessStartInfo();
@@ -285,7 +289,6 @@ namespace youtube_dl_gui
             folderBrowserDialog.ShowDialog();
             selectedPath = folderBrowserDialog.SelectedPath;
 
-            // duzina barem iznad 0, jer kad se upali program, i odma se izabere openFolder, pa izabere cancel, bez biranja, vraca prazan string
             if(selectedPath == null || selectedPath.Length < 3) return;
             if(selectedPath[selectedPath.Length - 1] != '\\') selectedPath += "\\";
 
